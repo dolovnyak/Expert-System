@@ -18,7 +18,7 @@ namespace ExpertSystem
             facts = FilterAndCheckFacts(facts, initialFacts);
             InitFacts(facts, initialFacts);
 
-            var queries = new List<char> {'C'};
+            var queries = new List<char> {'A', 'B', 'C', 'D', 'K'};
             CheckQueries(facts, queries);
 
             foreach (var query in queries)
@@ -118,6 +118,8 @@ namespace ExpertSystem
                 {
                     expressionOperation.ExpressionRight.EvaluateFactsInsideExpression(
                         EvaluateExpression(mainExpressionList, expressionOperation.ExpressionLeft));
+//                    expressionOperation.ExpressionRight.EvaluateFactsInsideExpression(
+//                        EvaluateExpression(mainExpressionList, expressionOperation.ExpressionLeft));
                 }
             }
 
@@ -135,9 +137,9 @@ namespace ExpertSystem
                         EvaluateExpression(mainExpressionList, expressionOperation.ExpressionRight));
                 case ExpressionFact expressionFact:
                     return EvaluateQuery(mainExpressionList, expressionFact.Fact);
+                default:
+                    return State.False;
             }
-
-            throw new Exception();
         }
     }
 }

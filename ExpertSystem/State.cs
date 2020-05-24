@@ -2,8 +2,8 @@ namespace ExpertSystem
 {
     public enum State
     {
-        True,
         False,
+        True,
         Undetermined
     }
 }

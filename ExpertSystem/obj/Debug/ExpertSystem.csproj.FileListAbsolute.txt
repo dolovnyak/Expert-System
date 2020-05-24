@@ -1,5 +1,0 @@
-/Users/bootcamp/Desktop/my_projects/school21projects/ExpertSystem/ExpertSystem/obj/Debug/ExpertSystem.csprojAssemblyReference.cache
-/Users/bootcamp/Desktop/my_projects/school21projects/ExpertSystem/ExpertSystem/bin/Debug/ExpertSystem.exe
-/Users/bootcamp/Desktop/my_projects/school21projects/ExpertSystem/ExpertSystem/bin/Debug/ExpertSystem.pdb
-/Users/bootcamp/Desktop/my_projects/school21projects/ExpertSystem/ExpertSystem/obj/Debug/ExpertSystem.exe
-/Users/bootcamp/Desktop/my_projects/school21projects/ExpertSystem/ExpertSystem/obj/Debug/ExpertSystem.pdb

@@ -33,5 +33,17 @@ namespace ExpertSystem
 
             throw new Exception();
         }
+
+        public override bool Contains(Fact fact)
+        {
+            return ExpressionLeft.Contains(fact) || ExpressionRight.Contains(fact);
+        }
+
+        public override void EvaluateFactsInsideExpression(State state)
+        {
+            ExpressionLeft.EvaluateFactsInsideExpression(state);
+            //TODO
+            ExpressionRight.EvaluateFactsInsideExpression(state);
+        }
     }
 }
