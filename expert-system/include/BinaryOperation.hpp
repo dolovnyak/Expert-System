@@ -22,7 +22,37 @@ public:
 		right_child_ = std::move(right_child);
 	}
 
-	State EvaluateState() override {
+	void UpdateState(std::shared_ptr<INode> sender) override {
+		std::shared_ptr<INode> child_to_update = sender == left_child_ ? right_child_ : left_child_;
+
+		State new_state;
+		State new_child_state;
+		switch (type_) {
+			case And:
+				new_state = ApplyAndOperation(left_child_->GetState(), right_child_->GetState());
+				new_child_state = new_state
+				break;
+			case Or:
+				new_state = ApplyOrOperation(left_child_->GetState(), right_child_->GetState());
+				break;
+			case Xor:
+				new_state = ApplyXorOperation(left_child_->GetState(), right_child_->GetState());
+				break;
+			case Implication:
+				new_state = ApplyImplicationOperation(left_child_->GetState(), right_child_->GetState());
+				break;
+			case Equivalence:
+				new_state = ApplyEquivalenceOperation(left_child_->GetState(), right_child_->GetState());
+				break;
+		}
+
+		if (static_cast<int>(new_state) > static_cast<int>(state_)) {
+			state_ = new_state;
+			UpdateParents(sender);
+		}
+	}
+
+	void UpdateState(State state, std::shared_ptr<INode> sender) override {
 		State lhs = left_child_->EvaluateState();
 		State rhs = right_child_->EvaluateState();
 		if (lhs == Undetermined || rhs == Undetermined) {
@@ -40,8 +70,6 @@ public:
 				return !(lhs == True && rhs == False) ? True : False;
 			case Equivalence:
 				return !(lhs == True ^ rhs == True) ? True : False;
-			default:
-				throw std::logic_error("Unknown binary operation type.");
 		}
 	}
 
@@ -61,4 +89,49 @@ private:
 	Type type_;
 	std::shared_ptr<INode> left_child_;
 	std::shared_ptr<INode> right_child_;
+
+	State ApplyAndOperation(State lhs, State rhs) {
+		if (lhs == True && rhs == True) {
+			return True;
+		} else if (lhs == False && rhs == False) {
+			return False;
+		}
+		return Undetermined;
+	}
+
+	State ApplyOrOperation(State lhs, State rhs) {
+		if (lhs == True || rhs == True) {
+			return True;
+		} else if (lhs == Undetermined || rhs == Undetermined) {
+			return Undetermined;
+		}
+		return False;
+	}
+
+	State ApplyXorOperation(State lhs, State rhs) {
+		if ((lhs == True && rhs == False) || (lhs == False && rhs == True)) {
+			return True;
+		} else if ((lhs == True && rhs == True) || (lhs == False && rhs == False)) {
+			return False;
+		}
+		return Undetermined;
+	}
+
+	State ApplyImplicationOperation(State lhs, State rhs) {
+		if (rhs == True) {
+			return True;
+		} else if (lhs == True && rhs == False) {
+			return False;
+		}
+		return Undetermined;
+	}
+
+	State ApplyEquivalenceOperation(State lhs, State rhs) {
+		if ((lhs == True && rhs == True) || (lhs == False && rhs == False)) {
+			return True;
+		} else if ((lhs == True && rhs == False) || (lhs == False && rhs == True)) {
+			return False;
+		}
+		return Undetermined;
+	}
 };

@@ -17,18 +17,33 @@ public:
 		child_ = std::move(child);
 	}
 
-	State EvaluateState() override {
-		State s = child_->EvaluateState();
-		if (s == Undetermined) {
-			return Undetermined;
-		}
-
+	void UpdateState(std::shared_ptr<INode> sender) override {
+		State new_state;
 		switch (type_) {
 			case Not:
-				return (s == False) ? True : False;
-			default:
-				throw std::logic_error("Unknown binary operation type.");
+				new_state = ApplyNotOperation(child_->GetState());
 		}
+
+		if (static_cast<int>(new_state) > static_cast<int>(state_)) {
+			state_ = new_state;
+			UpdateParents(sender);
+		}
+	}
+
+	void UpdateState(State state, std::shared_ptr<INode> sender) override {
+		state_ = state;
+
+		State new_child_state;
+		switch (type_) {
+			case Not:
+				new_child_state = ApplyNotOperation(state_);
+		}
+
+		if (static_cast<int>(new_child_state) > static_cast<int>(child_->GetState())) {
+			child_->UpdateState(new_child_state, SharedFromThis());
+		}
+
+		UpdateParents(sender);
 	}
 
 	[[nodiscard]] Type GetType() const {
@@ -42,4 +57,15 @@ public:
 private:
 	Type type_;
 	std::shared_ptr<INode> child_;
+
+	static State ApplyNotOperation(State state) {
+		switch (state) {
+			case False:
+				return True;
+			case Undetermined:
+				return Undetermined;
+			case True:
+				return False;
+		}
+	}
 };

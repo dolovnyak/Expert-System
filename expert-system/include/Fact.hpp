@@ -5,11 +5,13 @@
 class Fact final : public INode {
 public:
 	explicit Fact(char name)
-			: state_(Undetermined),
-			  name_(name) {}
+			: name_(name) {}
 
-	State EvaluateState() override {
-		return state_;
+	void UpdateState(std::shared_ptr<INode> sender) override {}
+
+	void UpdateState(State state, std::shared_ptr<INode> sender) override {
+		state_ = state;
+		UpdateParents(SharedFromThis());
 	}
 
 	[[nodiscard]] char GetName() const {
@@ -17,6 +19,5 @@ public:
 	}
 
 private:
-	INode::State state_;
 	char name_;
 };

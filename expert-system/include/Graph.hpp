@@ -9,7 +9,7 @@
 #include "UnaryOperation.hpp"
 #include "BinaryOperation.hpp"
 
-class NodeCache
+class Graph
 {
 public:
 	[[nodiscard]] static std::shared_ptr<INode> FindNode(const std::string &str);
