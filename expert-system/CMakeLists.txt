@@ -8,6 +8,10 @@ add_executable(expert_system)
 
 include_directories(
         include
-        ../imgui/imgui-github)
+        ../imgui/imgui-github
+        ../imgui/imgui-github/backends)
 
 add_subdirectory(src)
+
+target_link_libraries(expert_system
+        imgui)
