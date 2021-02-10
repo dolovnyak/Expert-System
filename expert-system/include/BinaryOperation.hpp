@@ -57,19 +57,6 @@ public:
 		return right_child_;
 	}
 
-public:
-	size_t GetHash() override {
-		return static_cast<size_t>(type_) * (113 * left_child_->GetHash() + right_child_->GetHash());
-	}
-
-	bool Equals(const std::shared_ptr<INode> &n) override {
-		std::shared_ptr<BinaryOperation> rbo = std::dynamic_pointer_cast<BinaryOperation>(n);
-		return rbo != nullptr
-			   && GetType() == rbo->GetType()
-			   && GetLeftChild()->Equals(rbo->GetLeftChild())
-			   && GetRightChild()->Equals(rbo->GetRightChild());
-	}
-
 private:
 	Type type_;
 	std::shared_ptr<INode> left_child_;
