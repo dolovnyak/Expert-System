@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(expert_system)
 
-include_directories(include)
+include_directories(
+        include
+        ../imgui/imgui-github)
 
 add_subdirectory(src)

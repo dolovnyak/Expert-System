@@ -7,9 +7,9 @@ public:
 	explicit Fact(char name)
 			: name_(name) {}
 
-	void UpdateState(std::shared_ptr<INode> sender) override {}
+	void UpdateState([[maybe_unused]] std::shared_ptr<INode> sender) override {}
 
-	void UpdateState(State state, std::shared_ptr<INode> sender) override {
+	void UpdateState(State state, [[maybe_unused]] std::shared_ptr<INode> sender) override {
 		state_ = state;
 		UpdateParents(SharedFromThis());
 	}
