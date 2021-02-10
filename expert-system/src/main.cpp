@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "INode.hpp"
+#include "Node.hpp"
 #include "NodeFactory.hpp"
 
 int main([[maybe_unused]] int ac, [[maybe_unused]] char **av) {

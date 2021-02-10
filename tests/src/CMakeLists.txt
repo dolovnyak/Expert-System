@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.17)
 
 target_sources(expert_system_tests PUBLIC
-        SimpleTest.cpp)
+        NodeEqualityTests.cpp
+        NodeFactoryTests.cpp)
