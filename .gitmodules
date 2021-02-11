@@ -1,3 +1,3 @@
-[submodule "imgui/imgui-github"]
-	path = imgui/imgui-github
+[submodule "expert-system/libs/imgui"]
+	path = expert-system/libs/imgui
 	url = https://github.com/ocornut/imgui.git
