@@ -22,4 +22,8 @@ target_link_libraries(${PROJECT_NAME} GLEW::GLEW)
 
 # add IMGUI
 add_subdirectory(libs/imgui)
-include_directories(${IMGUI_INCLUDE_DIRS})
+#include_directories(${IMGUI_INCLUDE_DIRS})
+include_directories(
+        libs/imgui/imgui-github
+        libs/imgui/imgui-github/backends
+        )
