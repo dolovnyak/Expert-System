@@ -13,7 +13,8 @@ class Graph
 {
 public:
 	[[nodiscard]] static std::shared_ptr<INode> FindNode(const std::string &str) {
-		return cache_.contains(str) ? cache_.at(str) : nullptr;
+		return nullptr;
+//		return cache_.contains(str) ? cache_.at(str) : nullptr; //in school mac there is no last c++20
 	}
 
 	static void AddNode(const std::string &str, std::shared_ptr<INode> &node) {
