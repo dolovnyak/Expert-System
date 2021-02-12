@@ -2,7 +2,7 @@
 *.idea
 *a.out
 *.swp
-expert-system/src/Grammar/lex.yy.c
-expert-system/src/Grammar/y.tab.c
-expert-system/src/Grammar/y.tab.h
 test_lex_yacc
+*.ll.cpp
+*.yy.cpp
+*.yy.hpp

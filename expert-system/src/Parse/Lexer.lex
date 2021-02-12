@@ -1,7 +1,10 @@
 %{
-#include "y.tab.h"
-//int yylex();
+#include "Grammar.yy.hpp"
+
 %}
+
+%option nounput
+%option noinput
 
 %%
 

@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.17)
 project(IMGUI)
-set(CMAKE_CXX_STANDARD 17)
 
 target_sources(expert_system PUBLIC
         imgui-github/imgui.cpp
@@ -12,14 +11,10 @@ target_sources(expert_system PUBLIC
         imgui-github/backends/imgui_impl_opengl3.cpp
         )
 
-#set(${PROJECT_NAME}_INCLUDE_DIRS
-#        imgui-github/
-#        imgui-github/backends
-#        )
-#
-#include_directories(${${PROJECT_NAME}_INCLUDE_DIRS})
+set(${PROJECT_NAME}_INCLUDE_DIRS
+        ${CMAKE_CURRENT_SOURCE_DIR}/imgui-github/
+        ${CMAKE_CURRENT_SOURCE_DIR}/imgui-github/backends
+        CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE
+        )
 
-include_directories(
-        imgui-github/
-        imgui-github/backends
-)
+include_directories(${${PROJECT_NAME}_INCLUDE_DIRS})

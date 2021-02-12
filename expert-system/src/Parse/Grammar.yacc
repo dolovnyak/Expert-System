@@ -1,13 +1,16 @@
 %{
-//#include <iostream>
+#include <iostream>
 #include <stdio.h>
+
 //extern int yychar;
+extern int yylex();
 
 void yyerror(const char *msg)
 {
     //std::cerr << msg  << " " << yylineno<< std::endl;
     //printf("yychar: %d\n", yychar);
-    printf("ERROR %s\n", msg);
+    std::cout << "ERROR " << msg << std::endl;
+//    printf("ERROR %s\n", msg);
     // throw AVM::SyntaxError(yylineno, "LINE", "TOKEN");
 }
 
@@ -25,8 +28,7 @@ void yyerror(const char *msg)
 %token      ES_OPEN_BRACKET
 %token      ES_CLOSE_BRACKET
 
-%left       ES_OR
-%left       ES_XOR
+%left       ES_OR ES_XOR
 %left       ES_AND
 %left       ES_NOT
 
