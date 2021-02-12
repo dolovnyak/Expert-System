@@ -18,7 +18,7 @@ add_dependencies(${PROJECT_NAME} parser_generator)
 
 # generate lex/yacc parse when reload cmake
 execute_process(COMMAND lex -o ${CMAKE_CURRENT_SOURCE_DIR}/Lexer.ll.cpp ${CMAKE_CURRENT_SOURCE_DIR}/Lexer.lex)
-execute_process(COMMAND sed -i "" -- "s/register//g" ${CMAKE_CURRENT_SOURCE_DIR}/Lexer.ll.cpp)
+execute_process(COMMAND sed -i "" -- "s/register//g" ${CMAKE_CURRENT_SOURCE_DIR}/Lexer.ll.cpp) #for compatibility with c++17
 execute_process(COMMAND yacc -o ${CMAKE_CURRENT_SOURCE_DIR}/Grammar.yy.cpp -d ${CMAKE_CURRENT_SOURCE_DIR}/Grammar.yacc)
 execute_process(COMMAND mv ${CMAKE_CURRENT_SOURCE_DIR}/Grammar.yy.hpp ${INCLUDE_DIR}/Grammar.yy.hpp)
 

@@ -6,3 +6,4 @@ test_lex_yacc
 *.ll.cpp
 *.yy.cpp
 *.yy.hpp
+*.DS_Store

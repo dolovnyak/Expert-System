@@ -27,6 +27,6 @@ add_custom_target(copy_examples ALL
 add_dependencies(${PROJECT_NAME} copy_examples)
 
 #add sources
-set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include) #for copy yacc output .hpp file
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include) #for copy yacc output .hpp file in include dir
 include_directories(include)
 add_subdirectory(src)
