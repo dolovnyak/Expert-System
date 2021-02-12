@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.17)
 
+execute_process(COMMAND lex -o ${CMAKE_CURRENT_SOURCE_DIR}/Lexer.ll.cpp ${CMAKE_CURRENT_SOURCE_DIR}/Lexer.lex)
+execute_process(COMMAND sed -i "" -- "s/register//g" ${CMAKE_CURRENT_SOURCE_DIR}/Lexer.ll.cpp)
+execute_process(COMMAND yacc -o ${CMAKE_CURRENT_SOURCE_DIR}/Grammar.yy.cpp -d ${CMAKE_CURRENT_SOURCE_DIR}/Grammar.yacc)
+execute_process(COMMAND mv ${CMAKE_CURRENT_SOURCE_DIR}/Grammar.yy.hpp ${INCLUDE_DIR}/Grammar.yy.hpp)
+
 target_sources(expert_system PUBLIC
         Grammar.yy.cpp
         Lexer.ll.cpp
