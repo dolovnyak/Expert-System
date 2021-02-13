@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Node.hpp"
+#include "INode.hpp"
 
 class Fact final : public INode {
 public:

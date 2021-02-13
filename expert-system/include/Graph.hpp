@@ -3,7 +3,7 @@
 #include <memory>
 #include <map>
 
-#include "Node.hpp"
+#include "INode.hpp"
 
 #include "Fact.hpp"
 #include "UnaryOperation.hpp"

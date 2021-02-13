@@ -1,81 +1,81 @@
 %{
 #include <iostream>
-#include <stdio.h>
 
-//extern int yychar;
+extern int yychar;
 extern int yylex();
 
 void yyerror(const char *msg)
 {
-    //std::cerr << msg  << " " << yylineno<< std::endl;
-    //printf("yychar: %d\n", yychar);
-    std::cout << "ERROR " << msg << std::endl;
-//    printf("ERROR %s\n", msg);
-    // throw AVM::SyntaxError(yylineno, "LINE", "TOKEN");
+    throw std::runtime_error("YACC EXCEPTION: " + std::string(msg) + ", lookahead token number " + std::to_string(yychar));
 }
 
 %}
 
-%token      ES_IMPLIES
-%token      ES_MUTUAL_IMPLIES
-%token      ES_OR
-%token      ES_XOR
-%token      ES_AND
-%token      ES_NOT
-%token      ES_FACT
-%token      ES_SEPARATOR
-%token      ES_COMMENT
-%token      ES_OPEN_BRACKET
-%token      ES_CLOSE_BRACKET
+%union          {char fact;}
 
-%left       ES_OR ES_XOR
-%left       ES_AND
-%left       ES_NOT
+%token          ES_IMPLIES
+%token          ES_MUTUAL_IMPLIES
+%token          ES_OR
+%token          ES_XOR
+%token          ES_AND
+%token          ES_NOT
+%token          ES_SEPARATOR
+%token          ES_COMMENT
+%token          ES_OPEN_BRACKET
+%token          ES_CLOSE_BRACKET
+
+%token<fact>    ES_FACT
+
+%left           ES_OR ES_XOR
+%left           ES_AND
+%left           ES_NOT
 
 %%
 
 
-IMPLIES:
-                    EXPRESSION ES_IMPLIES EXPRESSION SEPARATORS
-                    {
-                        printf("IMPLIES EXPRESSION\n");
-                    }
-
-                    | EXPRESSION ES_MUTUAL_IMPLIES EXPRESSION SEPARATORS
-                    {
-                        printf("MUTUAL IMPLIES EXPRESSION\n");
-                    }
+START_EXPRESSIONS:
+                    START_EXPRESSION
+                    | SEPARATORS START_EXPRESSIONS
+                    | START_EXPRESSION SEPARATORS START_EXPRESSIONS
 
 SEPARATORS:
-                    ES_SEPARATOR {printf("SEP\n");}
-                    | ES_SEPARATOR SEPARATORS {printf("SEPS\n");}
+                    ES_SEPARATOR
+                    | ES_SEPARATOR SEPARATORS
+
+START_EXPRESSION:
+                    | EXPRESSION ES_IMPLIES EXPRESSION
+                    {
+                        std::cout << "IMPLIES EXPRESSION" << std::endl << std::endl;
+                    }
+                    | EXPRESSION ES_MUTUAL_IMPLIES EXPRESSION
+                    {
+                        std::cout << "MUTUAL IMPLIES EXPRESSION" << std::endl << std::endl;
+                    }
 
 EXPRESSION:
                     ES_FACT
                     {
-                        printf("FACT\n");
+                        std::cout << $1 << std::endl;
                     }
-
                     | ES_NOT EXPRESSION
                     {
-                        printf("UNARY NOT\n");
+                        std::cout << "NOT" << std::endl;
                     }
-
                     | EXPRESSION ES_OR EXPRESSION
                     {
-                        printf("BOP OR\n");
+                        std::cout << "OR" << std::endl;
                     }
-
                     | EXPRESSION ES_XOR EXPRESSION
                     {
-                        printf("BOP XOR\n");
+                        std::cout << "XOR" << std::endl;
                     }
-
                     | EXPRESSION ES_AND EXPRESSION
                     {
-                        printf("BOP AND\n");
+                        std::cout << "AND" << std::endl;
                     }
-
                     | ES_OPEN_BRACKET EXPRESSION ES_CLOSE_BRACKET
+                    {
+                        std::cout << "EXPR IN BRACKETS" << std::endl;
+                    }
 
 %%

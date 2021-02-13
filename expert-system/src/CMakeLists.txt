@@ -4,6 +4,7 @@ target_sources(expert_system PUBLIC
         main.cpp
         imgui_test.cpp
         ExpertSystem.cpp
+        NodeFactory.cpp
         )
 
 add_subdirectory(Parse)

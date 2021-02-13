@@ -1,5 +1,6 @@
 %{
 #include "Grammar.yy.hpp"
+#include <iostream>
 
 %}
 
@@ -8,7 +9,8 @@
 
 %%
 
-[A-Z]           {printf("CHAR\n");return ES_FACT;}
+[A-Z]           {yylval.fact = yytext[0]; return ES_FACT;}
+
 "("             {return ES_OPEN_BRACKET;}
 ")"             {return ES_CLOSE_BRACKET;}
 "+"             {return ES_AND;}
@@ -17,11 +19,11 @@
 "!"             {return ES_NOT;}
 "=>"            {return ES_IMPLIES;}
 "<=>"           {return ES_MUTUAL_IMPLIES;}
-"\n"            {printf("NEW LINE\n");return ES_SEPARATOR;}
 
-#[^\n]+[\n]     {;}
+#[^\n]+[\n]     {return ES_SEPARATOR;}
+"\n"            {printf("NEW LINE\n");return ES_SEPARATOR;}
 [\t\v\r\f ]+    {;}
-.               {printf("error\n");}
+.               {throw std::runtime_error("LEX EXCEPTION: symbol doesn't correct");}
 
 %%
 

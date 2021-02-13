@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Node.hpp"
+#include "INode.hpp"
 
 class UnaryOperation final : public INode {
 public:
