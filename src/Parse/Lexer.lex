@@ -23,12 +23,14 @@
 #[^\n]+[\n]     {return ES_SEPARATOR;}
 "\n"            {printf("NEW LINE\n");return ES_SEPARATOR;}
 [\t\v\r\f ]+    {;}
+^"="[^\n]+[\n]+    {;}
+^"?"[^\n]+[\n]+    {;}
 .               {throw std::runtime_error("LEX EXCEPTION: symbol doesn't correct");}
 
 %%
 
 int yywrap (void)
 {
-    printf("finish input\n");
+    std::cout << "finish input" << std::endl;
     return 1;
 }

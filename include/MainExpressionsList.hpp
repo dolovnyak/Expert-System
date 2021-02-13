@@ -8,10 +8,10 @@ class MainExpressionsList
 public:
 	static MainExpressionsList& Instance();
 	
-	std::shared_ptr<Expression> Find(ExpressionSharedPtr expression);
+	std::shared_ptr<Expression> Find(const Expression& expression);
 	
-	void AddMainExpression(const ExpressionSharedPtr& expression);
+	void AddMainExpression(const Expression& expression);
 
-private:
-	std::vector<ExpressionSharedPtr> main_expressions_list_;
+//private:
+	std::vector<Expression> main_expressions_list_;
 };

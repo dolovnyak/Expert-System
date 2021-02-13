@@ -1,4 +1,5 @@
 #include "ExpertSystem.hpp"
+#include "MainExpressionsList.hpp"
 
 extern int imgui_test();
 int yyparse();
@@ -21,7 +22,7 @@ void ExpertSystem::Execute(FILE* file)
 	}
 	else
 	{
-	
+		std::cout << "expressions num: " << MainExpressionsList::Instance().main_expressions_list_.size() << std::endl;
 	}
 }
 

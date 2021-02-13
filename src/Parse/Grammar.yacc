@@ -14,7 +14,7 @@ void yyerror(const char *msg)
 
 %union              A{
                     char fact;
-                    Expression *expression;
+                    Expression* expression;
                     }
 
 %token              ES_IMPLIES
@@ -41,6 +41,7 @@ void yyerror(const char *msg)
 
 MAIN_EXPRESSIONS:
                     MAIN_EXPRESSION
+                    | SEPARATORS MAIN_EXPRESSIONS
                     | MAIN_EXPRESSION SEPARATORS MAIN_EXPRESSIONS
 
 SEPARATORS:
@@ -50,9 +51,9 @@ SEPARATORS:
 MAIN_EXPRESSION:
                     EXPRESSION ES_IMPLIES EXPRESSION
                     {
+                        Expression *main_expression(new BinaryExpression($1, BinaryOperator::IMPLIES, $3));
+                        MainExpressionsList::Instance().AddMainExpression(*main_expression);
                         std::cout << "IMPLIES EXPRESSION" << std::endl << std::endl;
-                        ExpressionSharedPtr main_expression(new BinaryExpression($1, BinaryOperator::IMPLIES, $3));
-                        MainExpressionsList::Instance.AddMainExpression(main_expression);
                     }
                     | EXPRESSION ES_MUTUAL_IMPLIES EXPRESSION
                     {
@@ -63,10 +64,10 @@ EXPRESSION:
                     ES_FACT
                     {
                         std::cout << $1 << std::endl;
-                        ExpressionSharedPtr expression(new FactExpression($1));
-                        if (MainExpressionsList::Instance.Find(expression) != nullptr)
-                            return MainExpressionsList::Instance.Find(expression);
-                        return expression;
+                        Expression *expression(new FactExpression($1));
+                        //if (MainExpressionsList::Instance.Find(expression) != nullptr)
+                        //    return MainExpressionsList::Instance.Find(expression);
+                        $$ = expression;
                     }
                     | ES_NOT EXPRESSION
                     {
