@@ -1,5 +1,6 @@
 %{
 #include <iostream>
+#include "Grammar.yy.hpp"
 
 extern int yychar;
 extern int yylex();
@@ -11,41 +12,47 @@ void yyerror(const char *msg)
 
 %}
 
-%union          {char fact;}
+%union              A{
+                    char fact;
+                    Expression *expression;
+                    }
 
-%token          ES_IMPLIES
-%token          ES_MUTUAL_IMPLIES
-%token          ES_OR
-%token          ES_XOR
-%token          ES_AND
-%token          ES_NOT
-%token          ES_SEPARATOR
-%token          ES_COMMENT
-%token          ES_OPEN_BRACKET
-%token          ES_CLOSE_BRACKET
+%token              ES_IMPLIES
+%token              ES_MUTUAL_IMPLIES
+%token              ES_OR
+%token              ES_XOR
+%token              ES_AND
+%token              ES_NOT
+%token              ES_SEPARATOR
+%token              ES_COMMENT
+%token              ES_OPEN_BRACKET
+%token              ES_CLOSE_BRACKET
 
-%token<fact>    ES_FACT
+%token<fact>        ES_FACT
 
-%left           ES_OR ES_XOR
-%left           ES_AND
-%left           ES_NOT
+%type<expression>   EXPRESSION
+
+%left               ES_OR ES_XOR
+%left               ES_AND
+%left               ES_NOT
+%left               ES_SEPARATOR
 
 %%
 
-
-START_EXPRESSIONS:
-                    START_EXPRESSION
-                    | SEPARATORS START_EXPRESSIONS
-                    | START_EXPRESSION SEPARATORS START_EXPRESSIONS
+MAIN_EXPRESSIONS:
+                    MAIN_EXPRESSION
+                    | MAIN_EXPRESSION SEPARATORS MAIN_EXPRESSIONS
 
 SEPARATORS:
                     ES_SEPARATOR
                     | ES_SEPARATOR SEPARATORS
 
-START_EXPRESSION:
-                    | EXPRESSION ES_IMPLIES EXPRESSION
+MAIN_EXPRESSION:
+                    EXPRESSION ES_IMPLIES EXPRESSION
                     {
                         std::cout << "IMPLIES EXPRESSION" << std::endl << std::endl;
+                        ExpressionSharedPtr main_expression(new BinaryExpression($1, BinaryOperator::IMPLIES, $3));
+                        MainExpressionsList::Instance.AddMainExpression(main_expression);
                     }
                     | EXPRESSION ES_MUTUAL_IMPLIES EXPRESSION
                     {
@@ -56,6 +63,10 @@ EXPRESSION:
                     ES_FACT
                     {
                         std::cout << $1 << std::endl;
+                        ExpressionSharedPtr expression(new FactExpression($1));
+                        if (MainExpressionsList::Instance.Find(expression) != nullptr)
+                            return MainExpressionsList::Instance.Find(expression);
+                        return expression;
                     }
                     | ES_NOT EXPRESSION
                     {
