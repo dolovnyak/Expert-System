@@ -1,20 +1,24 @@
 #include "ExpertSystem.hpp"
 #include "MainExpressionsList.hpp"
+#include "Visualizer.hpp"
 
-extern int imgui_test();
+extern void ShowExampleAppCustomNodeGraph(bool* opened);
 int yyparse();
 extern FILE *yyin;
 
-ExpertSystem::ExpertSystem() : visual_mode_on_(false)
-{
-}
+ExpertSystem::ExpertSystem(bool visualModeOn) : visual_mode_on_(visualModeOn)
+{}
 
 void ExpertSystem::Execute(FILE* file)
 {
 	
 	if (visual_mode_on_)
 	{
-		imgui_test();
+		Visualizer visualizer;
+		visualizer.SetupImgui();
+		visualizer.Execute();
+//		bool a = true;
+//		ShowExampleAppCustomNodeGraph(&a);
 //		each time when input in gui change need to get FILE* of this input and call 'yyin = file;' and 'yyparse'
 	}
 	else
@@ -24,9 +28,4 @@ void ExpertSystem::Execute(FILE* file)
 		std::cout << "expressions num: " << MainExpressionsList::Instance().main_expressions_list_.size() << std::endl;
 		fclose(file);
 	}
-}
-
-void ExpertSystem::SetVisualMode(bool visual_mode_on)
-{
-	visual_mode_on_ = visual_mode_on;
 }

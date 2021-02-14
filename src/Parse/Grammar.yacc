@@ -34,6 +34,7 @@ void yyerror(const char *msg)
 
 %type<expression>   EXPRESSION
 %type<fact>         TRUE_FACTS
+%type<fact>         QUESTION_FACTS
 
 %left               ES_OR ES_XOR
 %left               ES_AND
@@ -164,6 +165,7 @@ QUESTION_FACTS:
                     | ES_FACT
                     {
                         std::cout << "SET QUESTION FACT " << $1 << std::endl;
+                        $$ = $1;
                     }
 
 %%

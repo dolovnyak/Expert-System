@@ -8,10 +8,10 @@ MainExpressionsList& MainExpressionsList::Instance()
 
 Expression* MainExpressionsList::Find(Expression* expression)
 {
-	// parse all main_expressions_list_ in depth
-	for (Expression* expression : main_expressions_list_)
+	for (Expression* curExpression : main_expressions_list_)
 	{
-	
+		if (curExpression->Find(expression) != nullptr)
+			return curExpression->Find(expression);
 	}
 	return nullptr;
 }

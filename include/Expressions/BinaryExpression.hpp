@@ -15,8 +15,12 @@ class BinaryExpression : public Expression
 {
 public:
 	BinaryExpression(Expression *left, BinaryOperator binaryOperator, Expression *right);
+	
 	Expression* Find(Expression* expression) override;
 	std::string ToString() const override;
+	ExpressionType GetType() const override;
+	bool operator==(const Expression& expression) const override;
+	bool operator!=(const Expression& expression) const override;
 
 private:
 	Expression *left_expression_;
