@@ -1,5 +1,6 @@
 %{
 #include "Grammar.yy.hpp"
+#include <iostream>
 
 %}
 
@@ -8,7 +9,9 @@
 
 %%
 
-[A-Z]           {printf("CHAR\n");return ES_FACT;}
+"="             {return ES_EQUALLY;}
+"?"             {return ES_QUESTION;}
+[A-Z]           {yylval.fact = yytext[0]; return ES_FACT;}
 "("             {return ES_OPEN_BRACKET;}
 ")"             {return ES_CLOSE_BRACKET;}
 "+"             {return ES_AND;}
@@ -17,16 +20,16 @@
 "!"             {return ES_NOT;}
 "=>"            {return ES_IMPLIES;}
 "<=>"           {return ES_MUTUAL_IMPLIES;}
-"\n"            {printf("NEW LINE\n");return ES_SEPARATOR;}
 
-#[^\n]+[\n]     {;}
 [\t\v\r\f ]+    {;}
-.               {printf("error\n");}
+#[^\n]+[\n]     {return ES_SEPARATOR;}
+[\n]            {printf("NEW LINE\n");return ES_SEPARATOR;}
+.               {throw std::runtime_error("LEX EXCEPTION: lexeme \"" + std::string(yytext) + "\" doesn't correct");}
 
 %%
 
 int yywrap (void)
 {
-    printf("finish input\n");
+    std::cout << "finish input" << std::endl;
     return 1;
 }

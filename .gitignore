@@ -7,3 +7,4 @@ test_lex_yacc
 *.yy.cpp
 *.yy.hpp
 *.DS_Store
+expert_system

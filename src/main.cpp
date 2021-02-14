@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 		ExpertSystem expertSystem;
 		if (argparse.present("-v"))
 			expertSystem.SetVisualMode(true);
-		expertSystem.Execute(OpenFile(argparse.get<std::string>("start_puzzle")));
+		expertSystem.Execute(OpenFile(argparse.get<std::string>("input_file")));
 	}
 	catch (const std::exception &exception) {
 		std::cout << exception.what();
