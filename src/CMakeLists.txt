@@ -5,8 +5,8 @@ target_sources(expert_system PUBLIC
         imgui_test.cpp
         ExpertSystem.cpp
         MainExpressionsList.cpp
-        Expressions.cpp
         ExpressionSharedPtr.cpp
         )
 
+add_subdirectory(Expressions)
 add_subdirectory(Parse)

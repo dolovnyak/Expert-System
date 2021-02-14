@@ -6,15 +6,18 @@ MainExpressionsList& MainExpressionsList::Instance()
 	return mainExpressionsList;
 }
 
-std::shared_ptr<Expression> MainExpressionsList::Find(const Expression& expression)
+Expression* MainExpressionsList::Find(Expression* expression)
 {
 	// parse all main_expressions_list_ in depth
+	for (Expression* expression : main_expressions_list_)
+	{
+	
+	}
 	return nullptr;
 }
 
-void MainExpressionsList::AddMainExpression(const Expression& expression)
+void MainExpressionsList::AddMainExpression(Expression* expression)
 {
-	std::cout << "it work" << std::endl;
 	if (Find(expression) != nullptr) //if two identical rules
 		return;
 	else

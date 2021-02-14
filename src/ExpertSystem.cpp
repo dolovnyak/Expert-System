@@ -11,18 +11,18 @@ ExpertSystem::ExpertSystem() : visual_mode_on_(false)
 
 void ExpertSystem::Execute(FILE* file)
 {
-	yyin = file;
-	yyparse();
-	fclose(file);
-	//after yyparse we have completely filled graph
 	
 	if (visual_mode_on_)
 	{
 		imgui_test();
+//		each time when input in gui change need to get FILE* of this input and call 'yyin = file;' and 'yyparse'
 	}
 	else
 	{
+		yyin = file;
+		yyparse();
 		std::cout << "expressions num: " << MainExpressionsList::Instance().main_expressions_list_.size() << std::endl;
+		fclose(file);
 	}
 }
 

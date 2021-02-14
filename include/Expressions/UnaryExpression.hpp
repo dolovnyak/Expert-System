@@ -1,7 +1,27 @@
-//#pragma once
-//
-//#include "Expression.hpp"
-//
+#pragma once
+
+#include "Expressions/Expression.hpp"
+
+enum UnaryOperator
+{
+	NOT = 0
+};
+
+class UnaryExpression : public Expression
+{
+public:
+	UnaryExpression(UnaryOperator unaryOperator, Expression* expression);
+	
+	Expression* Find(Expression* expression) override;
+	std::string ToString() const override;
+
+private:
+	Expression *expression_;
+	UnaryOperator unary_operator_;
+	
+	std::string UnaryOperatorToString(UnaryOperator unaryOperator) const;
+};
+
 //class UnaryOperation final : public INode {
 //public:
 //	enum Type {

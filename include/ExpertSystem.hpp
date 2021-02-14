@@ -12,4 +12,3 @@ public:
 private:
 	bool visual_mode_on_;
 };
-
