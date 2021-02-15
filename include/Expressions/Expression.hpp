@@ -2,8 +2,7 @@
 
 #include <iostream>
 
-enum ExpressionType
-{
+enum ExpressionType {
 	FACT,
 	UNARY,
 	BINARY
@@ -12,6 +11,16 @@ enum ExpressionType
 class Expression
 {
 public:
+	enum State {
+		False,
+		Undetermined,
+		True
+	};
+
+	static std::string GetStateName(State state);
+
+public:
+
 	Expression() = default;
 	virtual ~Expression() = default;
 	

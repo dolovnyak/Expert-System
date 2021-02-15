@@ -7,7 +7,6 @@ target_sources(expert_system PUBLIC
         MainExpressionsList.cpp
         ExpressionSharedPtr.cpp
         Visualizer.cpp
-        redner_graph.cpp
         )
 
 add_subdirectory(Expressions)
