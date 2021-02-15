@@ -28,7 +28,7 @@ add_subdirectory(libs/imgui)
 include_directories(${IMGUI_INCLUDE_DIRS})
 
 #add sources
-set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include) #for copy yacc output .hpp file in include dir
+set(YACC_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include) #for copy yacc output .hpp
 include_directories(include)
 add_subdirectory(src)
 

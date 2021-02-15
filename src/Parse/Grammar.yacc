@@ -34,6 +34,7 @@ void yyerror(const char *msg)
 
 %type<expression>   EXPRESSION
 %type<fact>         TRUE_FACTS
+%type<fact>         QUESTION_FACTS
 
 %left               ES_OR ES_XOR
 %left               ES_AND
@@ -51,7 +52,7 @@ LINES:
 LINE:
                     | SET_TRUE_FACTS {std::cout << "was inside SET_TRUE_FACTS" << std::endl << std::endl;}
                     | SET_QUESTION_FACTS {std::cout << "was inside SET_QUESTION_FACTS" << std::endl << std::endl;}
-                    | MAIN_EXPRESSION {std::cout << "was inside MAIN_EXPRESSION" << std::endl << std::endl;}
+                    | MAIN_EXPRESSION {std::cout << std::endl;}
 
 SEPARATORS:
                     ES_SEPARATOR
@@ -61,49 +62,85 @@ MAIN_EXPRESSION:
                     EXPRESSION ES_IMPLIES EXPRESSION
                     {
                         Expression *main_expression(new BinaryExpression($1, BinaryOperator::IMPLIES, $3));
-                        MainExpressionsList::Instance().AddMainExpression(*main_expression);
-                        std::cout << "IMPLIES EXPRESSION" << std::endl;
+                        MainExpressionsList::Instance().AddMainExpression(main_expression);
+                        std::cout << *main_expression << std::endl;
                     }
                     | EXPRESSION ES_MUTUAL_IMPLIES EXPRESSION
                     {
-                        std::cout << "MUTUAL IMPLIES EXPRESSION" << std::endl;
+                        Expression *main_expression(new BinaryExpression($1, BinaryOperator::MUTUAL_IMPLIES, $3));
+                        MainExpressionsList::Instance().AddMainExpression(main_expression);
+                        std::cout << *main_expression << std::endl;
                     }
 
 EXPRESSION:
                     ES_FACT
                     {
-                        std::cout << $1 << std::endl;
                         Expression *expression(new FactExpression($1));
-                        //if (MainExpressionsList::Instance.Find(expression) != nullptr)
-                        //    return MainExpressionsList::Instance.Find(expression);
-                        $$ = expression;
+                        if (MainExpressionsList::Instance().Find(expression) != nullptr)
+                        {
+                            $$ = MainExpressionsList::Instance().Find(expression);
+                            delete expression;
+                        }
+                        else
+                            $$ = expression;
+                        std::cout << *$$ << std::endl;
                     }
                     | ES_NOT EXPRESSION
                     {
-                        std::cout << "NOT" << std::endl;
+                        Expression *expression(new UnaryExpression(UnaryOperator::NOT, $2));
+                        if (MainExpressionsList::Instance().Find(expression) != nullptr)
+                        {
+                            $$ = MainExpressionsList::Instance().Find(expression);
+                            delete expression;
+                        }
+                        else
+                            $$ = expression;
+                        std::cout << *$$ << std::endl;
                     }
                     | EXPRESSION ES_OR EXPRESSION
                     {
-                        std::cout << "OR" << std::endl;
+                        Expression *expression(new BinaryExpression($1, BinaryOperator::OR, $3));
+                        if (MainExpressionsList::Instance().Find(expression) != nullptr)
+                        {
+                            $$ = MainExpressionsList::Instance().Find(expression);
+                            delete expression;
+                        }
+                        else
+                            $$ = expression;
+                        std::cout << *$$ << std::endl;
                     }
                     | EXPRESSION ES_XOR EXPRESSION
                     {
-                        std::cout << "XOR" << std::endl;
+                        Expression *expression(new BinaryExpression($1, BinaryOperator::XOR, $3));
+                        if (MainExpressionsList::Instance().Find(expression) != nullptr)
+                        {
+                            $$ = MainExpressionsList::Instance().Find(expression);
+                            delete expression;
+                        }
+                        else
+                            $$ = expression;
+                        std::cout << *$$ << std::endl;
                     }
                     | EXPRESSION ES_AND EXPRESSION
                     {
-                        std::cout << "AND" << std::endl;
+                        Expression *expression(new BinaryExpression($1, BinaryOperator::AND, $3));
+                        if (MainExpressionsList::Instance().Find(expression) != nullptr)
+                        {
+                            $$ = MainExpressionsList::Instance().Find(expression);
+                            delete expression;
+                        }
+                        else
+                            $$ = expression;
+                        std::cout << *$$ << std::endl;
                     }
                     | ES_OPEN_BRACKET EXPRESSION ES_CLOSE_BRACKET
                     {
-                        std::cout << "EXPR IN BRACKETS" << std::endl;
+                        $$ = $2;
                     }
 
 SET_TRUE_FACTS:
                     ES_EQUALLY TRUE_FACTS
-                    {
-                        std::cout << "SET TURE FACTS" << std::endl;
-                    }
+                    | ES_EQUALLY
 
 TRUE_FACTS:
                     ES_FACT TRUE_FACTS
@@ -118,6 +155,7 @@ TRUE_FACTS:
 
 SET_QUESTION_FACTS:
                     ES_QUESTION QUESTION_FACTS
+                    | ES_QUESTION
 
 QUESTION_FACTS:
                     ES_FACT QUESTION_FACTS
@@ -127,6 +165,7 @@ QUESTION_FACTS:
                     | ES_FACT
                     {
                         std::cout << "SET QUESTION FACT " << $1 << std::endl;
+                        $$ = $1;
                     }
 
 %%

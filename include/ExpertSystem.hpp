@@ -5,11 +5,9 @@
 class ExpertSystem
 {
 public:
-	ExpertSystem();
+	ExpertSystem(bool visualModeOn);
 	void Execute(FILE *file);
-	void SetVisualMode(bool visual_mode_on);
 
 private:
 	bool visual_mode_on_;
 };
-

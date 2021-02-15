@@ -18,6 +18,8 @@ int main(int argc, char **argv)
 			.help("specify the input file.");
 	
 	argparse.add_argument("-v", "--visual")
+			.default_value(false)
+			.implicit_value(true)
 			.help("turns on visual mode.");
 	
 	try {
@@ -31,9 +33,7 @@ int main(int argc, char **argv)
 	}
 	
 	try {
-		ExpertSystem expertSystem;
-		if (argparse.present("-v"))
-			expertSystem.SetVisualMode(true);
+		ExpertSystem expertSystem(argparse.get<bool>("--visual"));
 		expertSystem.Execute(OpenFile(argparse.get<std::string>("input_file")));
 	}
 	catch (const std::exception &exception) {

@@ -1,17 +1,20 @@
 #pragma once
 
-#include "Expressions.hpp"
-#include "ExpressionSharedPtr.hpp"
+#include <vector>
+#include "Expressions/Expression.hpp"
+#include "Expressions/BinaryExpression.hpp"
+#include "Expressions/UnaryExpression.hpp"
+#include "Expressions/FactExpression.hpp"
 
 class MainExpressionsList
 {
 public:
 	static MainExpressionsList& Instance();
 	
-	std::shared_ptr<Expression> Find(const Expression& expression);
+	Expression* Find(Expression* expression);
 	
-	void AddMainExpression(const Expression& expression);
+	void AddMainExpression(Expression* expression);
 
 //private:
-	std::vector<Expression> main_expressions_list_;
+	std::vector<Expression*> main_expressions_list_;
 };

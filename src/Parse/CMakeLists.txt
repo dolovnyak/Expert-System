@@ -20,7 +20,7 @@ add_custom_target(parser_generator ALL
         COMMAND sed -i "" -- "s/register//g" ${LEX_CPP_OUTPUT} #for compatibility with c++17
         COMMAND yacc -o ${YACC_CPP_OUTPUT} -d ${YACC_INPUT}
         COMMAND echo ${INCLUDE_FOR_YACC_HEADER} | cat - ${YACC_HPP_OUTPUT} > tmp && mv tmp ${YACC_HPP_OUTPUT} #copy needed include into yacc header
-        COMMAND mv ${YACC_HPP_OUTPUT} ${INCLUDE_DIR}/Grammar.yy.hpp
+        COMMAND mv ${YACC_HPP_OUTPUT} ${YACC_INCLUDE_DIR}/Grammar.yy.hpp
         COMMENT "generate lex/yacc parser"
         VERBATIM
         )
@@ -30,4 +30,4 @@ add_dependencies(${PROJECT_NAME} parser_generator)
 execute_process(COMMAND lex -o ${LEX_CPP_OUTPUT} ${LEX_INPUT})
 execute_process(COMMAND sed -i "" -- "s/register//g" ${LEX_CPP_OUTPUT}) #for compatibility with c++17
 execute_process(COMMAND yacc -o ${YACC_CPP_OUTPUT} -d ${YACC_INPUT})
-execute_process(COMMAND mv ${YACC_HPP_OUTPUT} ${INCLUDE_DIR}/Grammar.yy.hpp)
+execute_process(COMMAND mv ${YACC_HPP_OUTPUT} ${YACC_INCLUDE_DIR}/Grammar.yy.hpp)
