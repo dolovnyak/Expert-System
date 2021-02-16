@@ -92,12 +92,16 @@ void Visualizer::Show()
 		if (should_execute_) {
 			error = nullptr;
 			try {
-				size_t s = strchr(buf, '\0') - buf + 1;
-				char *str = new char[s];
-				strncpy(str, buf, s);
-				FILE *f = fmemopen(str, s, "r");
-				owner_.Execute(f);
-				delete[] str;
+				size_t s = strchr(buf, '\0') - buf;
+				if (s > 0) {
+					char *str = new char[s];
+					strncpy(str, buf, s);
+					FILE *f = fmemopen(str, s, "r");
+					owner_.Execute(f);
+					delete[] str;
+				} else {
+					MainExpressionsList::Instance().main_expressions_list_.clear();
+				}
 
 				UpdateNodesAndLinks();
 			} catch (const std::exception &exception) {
@@ -139,7 +143,7 @@ void Visualizer::ProcessNode(const std::shared_ptr<Node> &parent, const Expressi
 	// TODO ugly construction
 	const auto *ue = dynamic_cast<const UnaryExpression *>(current);
 	if (ue != nullptr) {
-		ProcessNode(current_node, ue->GetChild(), pos + ImVec2(100, 0));
+		ProcessNode(current_node, ue->GetChild(), pos + ImVec2(150, 0));
 	}
 
 	const auto *be = dynamic_cast<const BinaryExpression *>(current);
