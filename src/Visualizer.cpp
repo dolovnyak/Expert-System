@@ -66,6 +66,7 @@ void Visualizer::Show()
 {
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+	CopyExpressionListToBuf();
 	UpdateNodesAndLinks();
 
 	while (!glfwWindowShouldClose(window_))
@@ -285,6 +286,21 @@ void Visualizer::DrawInputWindow() {
 	}
 
 	ImGui::End();
+}
+
+void Visualizer::CopyExpressionListToBuf() {
+	bzero(buf, IM_ARRAYSIZE(buf));
+	size_t i = 0;
+	for (const auto exp : MainExpressionsList::Instance().main_expressions_list_) {
+		std::string exp_str = exp->ToString();
+		size_t len = exp_str.size();
+		if (i + len + 1 >= IM_ARRAYSIZE(buf)) {
+			break;
+		}
+		strcpy(buf + i, exp_str.c_str());
+		i += len + 1;
+		buf[i - 1] = '\n';
+	}
 }
 
 

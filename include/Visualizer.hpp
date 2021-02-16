@@ -79,6 +79,8 @@ private:
 
 	static const int BUF_SIZE = 1024;
 	char buf[BUF_SIZE] = {0};
+	void CopyExpressionListToBuf();
+
 	bool should_execute_ = false;
 
 	std::unique_ptr<std::string> error = nullptr;
