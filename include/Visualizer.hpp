@@ -81,7 +81,7 @@ private:
 	char buf[BUF_SIZE] = {0};
 	bool should_execute_ = false;
 
-	std::shared_ptr<std::string> error = nullptr;
+	std::unique_ptr<std::string> error = nullptr;
 
 	void ProcessNode(const std::shared_ptr<Node>& parent, const Expression *current, const ImVec2 &pos);
 	void UpdateNodesAndLinks();

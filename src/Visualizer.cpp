@@ -1,5 +1,8 @@
 #include "Visualizer.hpp"
 
+// TODO remove
+#include <iostream>
+
 #include <memory>
 #include "MainExpressionsList.hpp"
 
@@ -89,10 +92,16 @@ void Visualizer::Show()
 		if (should_execute_) {
 			error = nullptr;
 			try {
-				FILE *content = fmemopen(buf, BUF_SIZE, "r");
-				owner_.Execute(content);
+				size_t s = strchr(buf, '\0') - buf + 1;
+				char *str = new char[s];
+				strncpy(str, buf, s);
+				FILE *f = fmemopen(str, s, "r");
+				owner_.Execute(f);
+				delete[] str;
+
+				UpdateNodesAndLinks();
 			} catch (const std::exception &exception) {
-				std::shared_ptr<std::string> error_local(new std::string(exception.what()));
+				std::unique_ptr<std::string> error_local(new std::string(exception.what()));
 				error = std::move(error_local);
 			}
 			should_execute_ = false;
