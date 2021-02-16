@@ -98,7 +98,7 @@ void Visualizer::Show()
 					char *str = new char[s];
 					strncpy(str, buf, s);
 					FILE *f = fmemopen(str, s, "r");
-					owner_.Execute(f);
+					owner_.Setup(f);
 					delete[] str;
 				} else {
 					MainExpressionsList::Instance().main_expressions_list_.clear();

@@ -2,8 +2,7 @@
 
 #include "Expression.hpp"
 
-enum BinaryOperator
-{
+enum BinaryOperator {
 	AND = 0,
 	OR,
 	XOR,
@@ -11,26 +10,35 @@ enum BinaryOperator
 	MUTUAL_IMPLIES
 };
 
-class BinaryExpression : public Expression
-{
+class BinaryExpression : public Expression {
 public:
 	BinaryExpression(Expression *left, BinaryOperator binaryOperator, Expression *right);
-	
-	Expression* Find(Expression* expression) override;
-	std::string ToString() const override;
-	ExpressionType GetType() const override;
-	bool operator==(const Expression& expression) const override;
-	bool operator!=(const Expression& expression) const override;
 
-	[[nodiscard]] Expression *GetLeftChild() const { return left_expression_; }
-	[[nodiscard]] Expression *GetRightChild() const { return right_expression_; }
+	Expression *Find(Expression *expression) override;
+
+	[[nodiscard]] std::string ToString() const override;
+
+	[[nodiscard]] ExpressionType GetType() const override;
+
+	bool operator==(const Expression &expression) const override;
+
+	bool operator!=(const Expression &expression) const override;
+
+	[[nodiscard]] Expression *GetLeftChild() const { return left_child_; }
+
+	[[nodiscard]] Expression *GetRightChild() const { return right_child_; }
+
+	void Calculate(ExpertSystem &expert_system) override;
+
+protected:
+	void UpdateState(State state) override;
 
 private:
-	Expression *left_expression_;
+	Expression *left_child_;
+	Expression *right_child_;
 	BinaryOperator binary_operator_;
-	Expression *right_expression_;
-	
-	std::string BinaryOperatorToString(BinaryOperator binaryOperator) const;
+
+	[[nodiscard]] static std::string GetString(BinaryOperator binaryOperator) ;
 };
 
 

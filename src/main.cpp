@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 	try {
 		ExpertSystem expertSystem;
 
-		expertSystem.Execute(OpenFile(argparse.get<std::string>("input_file")));
+		expertSystem.Setup(OpenFile(argparse.get<std::string>("input_file")));
 
 		if (argparse.get<bool>("--visual")) {
 			Visualizer visualizer(expertSystem);

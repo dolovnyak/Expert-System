@@ -2,27 +2,34 @@
 
 #include "Expressions/Expression.hpp"
 
-enum UnaryOperator
-{
+enum UnaryOperator {
 	NOT = 0,
 	PARENTHESES
 };
 
-class UnaryExpression : public Expression
-{
+class UnaryExpression : public Expression {
 public:
-	UnaryExpression(UnaryOperator unaryOperator, Expression* expression);
-	
-	Expression* Find(Expression* expression) override;
-	std::string ToString() const override;
-	ExpressionType GetType() const override;
-	bool operator==(const Expression& expression) const override;
-	bool operator!=(const Expression& expression) const override;
+	UnaryExpression(UnaryOperator unaryOperator, Expression *expression);
 
-	[[nodiscard]] Expression *GetChild() const { return expression_; }
-	
+	Expression *Find(Expression *expression) override;
+
+	[[nodiscard]] std::string ToString() const override;
+
+	[[nodiscard]] ExpressionType GetType() const override;
+
+	bool operator==(const Expression &expression) const override;
+
+	bool operator!=(const Expression &expression) const override;
+
+	[[nodiscard]] Expression *GetChild() const { return child_; }
+
+	void Calculate(ExpertSystem &expert_system) override;
+
+protected:
+	void UpdateState(State state) override;
+
 private:
-	Expression *expression_;
+	Expression *child_;
 	UnaryOperator unary_operator_;
 };
 
