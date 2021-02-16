@@ -1,4 +1,6 @@
 #include "Visualizer.hpp"
+
+#include <memory>
 #include "MainExpressionsList.hpp"
 
 static void glfw_error_callback(int error, const char* description)
@@ -108,38 +110,33 @@ void Visualizer::Show()
 
 static int local_id = 0;
 
-static inline int GetOutputsCount(const Expression *expression) {
-	return static_cast<int>(expression->GetType());
-}
-
-void Visualizer::ProcessNode(const Node *parent, const Expression *current, const ImVec2 &pos) {
+void Visualizer::ProcessNode(const std::shared_ptr<Node> &parent, const Expression *current, const ImVec2 &pos) {
 	std::string str = current->ToString();
 	if (expressions_.find(str) != expressions_.end()) {
 		if (parent != nullptr) {
-			const auto node = expressions_.at(str);
-			links.push_back(NodeLink(parent->ID, 0, node.ID, 0));
+			links.push_back(std::make_shared<NodeLink>(parent->ID, 0, expressions_.at(str)->ID, 0));
 		}
 		return;
 	}
 
-	nodes.push_back(Node(local_id++, current->ToString(), pos, 1, GetOutputsCount(current)));
-	const Node &current_node = nodes.back();
+	std::shared_ptr<Node> current_node = std::make_shared<Node>(local_id++, current->ToString(), pos, 1, 1);
+	nodes.push_back(current_node);
 	expressions_.insert({str, current_node});
 
 	if (parent != nullptr) {
-		links.push_back(NodeLink(parent->ID, 0, current_node.ID, 0));
+		links.push_back(std::make_shared<NodeLink>(parent->ID, 0, current_node->ID, 0));
 	}
 
 	// TODO ugly construction
 	const auto *ue = dynamic_cast<const UnaryExpression *>(current);
 	if (ue != nullptr) {
-		ProcessNode(&current_node, ue->GetChild(), pos + ImVec2(100, 0));
+		ProcessNode(current_node, ue->GetChild(), pos + ImVec2(100, 0));
 	}
 
 	const auto *be = dynamic_cast<const BinaryExpression *>(current);
 	if (be != nullptr) {
-		ProcessNode(&current_node, be->GetLeftChild(), pos + ImVec2(150, -25));
-		ProcessNode(&current_node, be->GetRightChild(), pos + ImVec2(150, 25));
+		ProcessNode(current_node, be->GetLeftChild(), pos + ImVec2(150, -25));
+		ProcessNode(current_node, be->GetRightChild(), pos + ImVec2(150, 25));
 	}
 }
 
@@ -147,6 +144,7 @@ void Visualizer::UpdateNodesAndLinks() {
 	local_id = 0;
 	nodes.clear();
 	links.clear();
+	expressions_.clear();
 
 	ImVec2 pos(50, 50);
 	for (const auto expression : MainExpressionsList::Instance().main_expressions_list_) {
@@ -176,33 +174,19 @@ void Visualizer::DrawGraphWindow() {
 	const ImVec2 offset = ImGui::GetCursorScreenPos() + scrolling;
 	ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
-	// Display grid
-	ImU32 GRID_COLOR = IM_COL32(200, 200, 200, 40);
-	float GRID_SZ = 64.0f;
-	ImVec2 win_pos = ImGui::GetCursorScreenPos();
-	ImVec2 canvas_sz = ImGui::GetWindowSize();
-	for (float x = fmodf(scrolling.x, GRID_SZ); x < canvas_sz.x; x += GRID_SZ)
-		draw_list->AddLine(ImVec2(x, 0.0f) + win_pos, ImVec2(x, canvas_sz.y) + win_pos, GRID_COLOR);
-	for (float y = fmodf(scrolling.y, GRID_SZ); y < canvas_sz.y; y += GRID_SZ)
-		draw_list->AddLine(ImVec2(0.0f, y) + win_pos, ImVec2(canvas_sz.x, y) + win_pos, GRID_COLOR);
-
 	// Display links
 	draw_list->ChannelsSplit(2);
 	draw_list->ChannelsSetCurrent(0); // Background
-	for (int link_idx = 0; link_idx < links.Size; link_idx++)
+	for (const auto &link : links)
 	{
-		NodeLink* link = &links[link_idx];
-		Node* node_inp = &nodes[link->InputIdx];
-		Node* node_out = &nodes[link->OutputIdx];
-		ImVec2 p1 = offset + node_inp->GetOutputSlotPos(link->InputSlot);
-		ImVec2 p2 = offset + node_out->GetInputSlotPos(link->OutputSlot);
+		ImVec2 p1 = offset + nodes[link->InputIdx]->GetOutputSlotPos(link->InputSlot);
+		ImVec2 p2 = offset + nodes[link->OutputIdx]->GetInputSlotPos(link->OutputSlot);
 		draw_list->AddBezierCurve(p1, p1 + ImVec2(+50, 0), p2 + ImVec2(-50, 0), p2, IM_COL32(200, 200, 100, 255), 3.0f);
 	}
 
 	// Display nodes
-	for (int node_idx = 0; node_idx < nodes.Size; node_idx++)
+	for (const auto &node : nodes)
 	{
-		Node* node = &nodes[node_idx];
 		ImGui::PushID(node->ID);
 		ImVec2 node_rect_min = offset + node->Pos;
 

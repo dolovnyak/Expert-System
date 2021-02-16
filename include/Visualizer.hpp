@@ -11,6 +11,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <utility>
+#include <vector>
 #include <map>
 
 #include "Expressions/Expression.hpp"
@@ -68,10 +69,10 @@ private:
 
 	GLFWwindow* window_ = nullptr;
 
-	ImVector<Node> nodes;
-	ImVector<NodeLink> links;
+	std::vector<std::shared_ptr<Node>> nodes;
+	std::vector<std::shared_ptr<NodeLink>> links;
 	// TODO optimize
-	std::map<std::string, const Node &> expressions_;
+	std::map<std::string, std::shared_ptr<Node>> expressions_;
 
 	ImVec2 scrolling = ImVec2(0.0f, 0.0f);
 	int node_selected = -1;
@@ -82,7 +83,7 @@ private:
 
 	std::shared_ptr<std::string> error = nullptr;
 
-	void ProcessNode(const Node *parent, const Expression *current, const ImVec2 &pos);
+	void ProcessNode(const std::shared_ptr<Node>& parent, const Expression *current, const ImVec2 &pos);
 	void UpdateNodesAndLinks();
 
 	void DrawGraphWindow();
