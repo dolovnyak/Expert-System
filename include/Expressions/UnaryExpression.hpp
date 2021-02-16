@@ -4,7 +4,8 @@
 
 enum UnaryOperator
 {
-	NOT = 0
+	NOT = 0,
+	PARENTHESES
 };
 
 class UnaryExpression : public Expression
@@ -23,8 +24,6 @@ public:
 private:
 	Expression *expression_;
 	UnaryOperator unary_operator_;
-	
-	std::string UnaryOperatorToString(UnaryOperator unaryOperator) const;
 };
 
 //class UnaryOperation final : public INode {

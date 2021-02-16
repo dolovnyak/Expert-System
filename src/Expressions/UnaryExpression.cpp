@@ -15,14 +15,11 @@ Expression* UnaryExpression::Find(Expression* expression)
 
 std::string UnaryExpression::ToString() const
 {
-	return UnaryOperatorToString(unary_operator_) + expression_->ToString();
-}
-
-std::string UnaryExpression::UnaryOperatorToString(UnaryOperator unaryOperator) const
-{
-	switch (unaryOperator)
-	{
-		case UnaryOperator::NOT: return "!";
+	switch (unary_operator_) {
+		case NOT:
+			return "!" + expression_->ToString();
+		case PARENTHESES:
+			return "(" + expression_->ToString() + ")";
 	}
 }
 
