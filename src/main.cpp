@@ -1,6 +1,7 @@
 #include "argparse/argparse.hpp"
 #include "Grammar.yy.hpp"
 #include "ExpertSystem.hpp"
+#include "Visualizer.hpp"
 
 FILE *OpenFile(const std::string &file_name) {
 	FILE *f = fopen(file_name.c_str(), "r");
@@ -33,8 +34,15 @@ int main(int argc, char **argv)
 	}
 	
 	try {
-		ExpertSystem expertSystem(argparse.get<bool>("--visual"));
+		ExpertSystem expertSystem;
+
 		expertSystem.Execute(OpenFile(argparse.get<std::string>("input_file")));
+
+		if (argparse.get<bool>("--visual")) {
+			Visualizer visualizer(expertSystem);
+			visualizer.SetupImGui();
+			visualizer.Show();
+		}
 	}
 	catch (const std::exception &exception) {
 		std::cout << exception.what();

@@ -22,6 +22,9 @@ public:
 	bool operator==(const Expression& expression) const override;
 	bool operator!=(const Expression& expression) const override;
 
+	[[nodiscard]] Expression *GetLeftChild() const { return left_expression_; }
+	[[nodiscard]] Expression *GetRightChild() const { return right_expression_; }
+
 private:
 	Expression *left_expression_;
 	BinaryOperator binary_operator_;

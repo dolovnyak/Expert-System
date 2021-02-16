@@ -17,6 +17,8 @@ public:
 	ExpressionType GetType() const override;
 	bool operator==(const Expression& expression) const override;
 	bool operator!=(const Expression& expression) const override;
+
+	[[nodiscard]] Expression *GetChild() const { return expression_; }
 	
 private:
 	Expression *expression_;
