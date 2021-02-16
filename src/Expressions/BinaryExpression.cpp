@@ -84,7 +84,8 @@ void BinaryExpression::UpdateState(Expression::State state) {
 	// TODO implement
 	switch (binary_operator_) {
 		case AND:
-
+			left_child_->UpdateState(state);
+			right_child_->UpdateState(state);
 			break;
 		case OR:
 			break;

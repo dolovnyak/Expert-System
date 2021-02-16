@@ -3,7 +3,7 @@
 #include "ExpertSystem.hpp"
 #include "Visualizer.hpp"
 
-FILE *OpenFile(const std::string &file_name) {
+FILE *open_file(const std::string &file_name) {
 	FILE *f = fopen(file_name.c_str(), "r");
 	if (!f)
 		throw std::runtime_error("Error on opening file : " + file_name);
@@ -34,12 +34,13 @@ int main(int argc, char **argv)
 	}
 	
 	try {
-		ExpertSystem expertSystem;
+		ExpertSystem expert_system;
 
-		expertSystem.Setup(OpenFile(argparse.get<std::string>("input_file")));
+		expert_system.Setup(open_file(argparse.get<std::string>("input_file")));
+		expert_system.Solve();
 
 		if (argparse.get<bool>("--visual")) {
-			Visualizer visualizer(expertSystem);
+			Visualizer visualizer(expert_system);
 			visualizer.SetupImGui();
 			visualizer.Show();
 		}

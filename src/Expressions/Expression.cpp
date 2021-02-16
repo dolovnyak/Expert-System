@@ -27,7 +27,7 @@ void Expression::UpdateState(Expression::State state) {
 	if (state > state_) {
 		state_ = state;
 		// TODO logging
-	} else {
+	} else if (state < state_) {
 		// TODO error or something else
 	}
 }
