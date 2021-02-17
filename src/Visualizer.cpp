@@ -274,7 +274,7 @@ void Visualizer::DrawGraphWindow() {
 
 void Visualizer::DrawInputWindow() {
 	ImGui::SetNextWindowPos(ImVec2(GRAPH_WINDOW_WIDTH + 2 * PADDING_X, PADDING_Y), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowSize(ImVec2(INPUT_WINDOW_WIDTH, INPUT_WINDOW_HEIGHT));
+	ImGui::SetNextWindowSize(ImVec2(INPUT_WINDOW_WIDTH, INPUT_WINDOW_HEIGHT), ImGuiCond_FirstUseEver);
 	
 	ImGui::Begin("Input");
 	ImGui::InputTextMultiline("", buf, IM_ARRAYSIZE(buf), ImVec2(INPUT_WINDOW_WIDTH - 30, INPUT_WINDOW_HEIGHT * 0.8));
@@ -316,8 +316,8 @@ void Visualizer::CopyExpressionListToBuf(const std::vector<Expression *> &expres
 }
 
 void Visualizer::DrawFactsWindow(const ExpertSystemData &data) {
-	ImGui::SetNextWindowPos(ImVec2(GRAPH_WINDOW_WIDTH + 2 * PADDING_X, INPUT_WINDOW_HEIGHT + 2 * PADDING_Y));
-	ImGui::SetNextWindowSize(ImVec2(FACTS_WINDOW_WIDTH, FACTS_WINDOW_HEIGHT));
+	ImGui::SetNextWindowPos(ImVec2(GRAPH_WINDOW_WIDTH + 2 * PADDING_X, INPUT_WINDOW_HEIGHT + 2 * PADDING_Y), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(FACTS_WINDOW_WIDTH, FACTS_WINDOW_HEIGHT), ImGuiCond_FirstUseEver);
 
 	ImGui::Begin("Facts");
 	for (char f = 'A'; f <= 'Z'; ++f) {
