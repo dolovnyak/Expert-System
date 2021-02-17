@@ -58,15 +58,10 @@ struct NodeLink
 class Visualizer
 {
 public:
-	explicit Visualizer(const ExpertSystem &owner)
-		: owner_(const_cast<ExpertSystem &>(owner)) {}
-
 	void SetupImGui();
-	void Show();
+	void Show(const ExpertSystemData &expert_system_data);
 
 private:
-	ExpertSystem &owner_;
-
 	GLFWwindow* window_ = nullptr;
 
 	std::vector<std::shared_ptr<Node>> nodes;
@@ -79,14 +74,14 @@ private:
 
 	static const int BUF_SIZE = 1024;
 	char buf[BUF_SIZE] = {0};
-	void CopyExpressionListToBuf();
+	void CopyExpressionListToBuf(const std::vector<Expression *> &expressions);
 
 	bool should_execute_ = false;
 
 	std::unique_ptr<std::string> error = nullptr;
 
 	void ProcessNode(const std::shared_ptr<Node>& parent, const Expression *current, const ImVec2 &pos);
-	void UpdateNodesAndLinks();
+	void UpdateNodesAndLinks(const ExpertSystemData &expert_system_data);
 
 	void DrawGraphWindow();
 

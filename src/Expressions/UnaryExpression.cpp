@@ -1,4 +1,6 @@
 #include "Expressions/UnaryExpression.hpp"
+#include "ExpertSystem.hpp"
+#include "ExpertSystemData.hpp"
 
 UnaryExpression::UnaryExpression(UnaryOperator unaryOperator, Expression* child)
 		: unary_operator_(unaryOperator), child_(child)
@@ -57,27 +59,23 @@ static inline Expression::State ApplyNot(Expression::State state) {
 	}
 }
 
-void UnaryExpression::Calculate(ExpertSystem &expert_system) {
-	this->Expression::Calculate(expert_system);
+void UnaryExpression::Calculate(ExpertSystemData &expert_system_data) {
+	this->Expression::Calculate(expert_system_data);
 
-	child_->Calculate(expert_system);
+	child_->Calculate(expert_system_data);
 	switch (unary_operator_) {
 		case NOT:
 			if (state_ < ApplyNot(child_->GetState())) {
-				state_ = child_->GetState();
-				// TODO logging
+				Expression::UpdateState(child_->GetState());
 			} else if (child_->GetState() < ApplyNot(state_)) {
 				child_->UpdateState(state_);
-				// TODO logging
 			}
 			break;
 		case PARENTHESES:
 			if (state_ < child_->GetState()) {
-				state_ = child_->GetState();
-				// TODO logging
+				Expression::UpdateState(child_->GetState());
 			} else if (child_->GetState() < state_) {
 				child_->UpdateState(state_);
-				// TODO logging
 			}
 			break;
 	}

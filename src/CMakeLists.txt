@@ -4,7 +4,7 @@ target_sources(expert_system PUBLIC
         main.cpp
         imgui_graph_test.cpp
         ExpertSystem.cpp
-        MainExpressionsList.cpp
+        ExpertSystemData.cpp
         ExpressionSharedPtr.cpp
         Visualizer.cpp
         )

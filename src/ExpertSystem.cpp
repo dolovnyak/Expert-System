@@ -1,34 +1,29 @@
-#include "ExpertSystem.hpp"
-#include "MainExpressionsList.hpp"
-#include "Visualizer.hpp"
+#include <chrono>
+#include <iostream>
 
-int yyparse();
+#include "ExpertSystem.hpp"
+#include "ExpertSystemData.hpp"
+
+int yyparse(ExpertSystemData *data);
 extern FILE *yyin;
 
-void ExpertSystem::Setup(FILE* file)
-{
-	MainExpressionsList::Instance().main_expressions_list_.clear();
-
+ExpertSystemData ExpertSystem::Parse(FILE *file) {
 	yyin = file;
-	yyparse();
-	std::cout << "expressions num: " << MainExpressionsList::Instance().main_expressions_list_.size() << std::endl;
+
+	ExpertSystemData data;
+	yyparse(&data);
 	fclose(file);
+
+	return data;
 }
 
-/// Works with data from ExpertSystem class
-void ExpertSystem::Solve() {
-	for (const auto request : query_) {
-		request->Calculate(*this);
+void ExpertSystem::Solve(ExpertSystemData &expert_system_data) {
+	for (const auto request : expert_system_data.GetQuery()) {
+		request->Calculate(expert_system_data);
 	}
 }
 
-std::vector<Expression *> ExpertSystem::FindAllOwners(Expression *expression) {
-	// TODO check
-	std::vector<Expression *> result(main_expressions_.size());
-	for (auto main_expression : main_expressions_) {
-		if (main_expression->Find(expression) != nullptr) {
-			result.push_back(expression);
-		}
-	}
-	return result;
+void ExpertSystem::RaiseEvent(const IEvent &event) {
+	std::time_t now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+	std::cout << std::ctime(&now) << ": " << event.ToString() << std::endl;
 }

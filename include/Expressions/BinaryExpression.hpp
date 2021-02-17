@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ExpertSystem.hpp>
+
 #include "Expression.hpp"
 
 enum BinaryOperator {
@@ -28,7 +30,7 @@ public:
 
 	[[nodiscard]] Expression *GetRightChild() const { return right_child_; }
 
-	void Calculate(ExpertSystem &expert_system) override;
+	void Calculate(ExpertSystemData &expert_system_data) override;
 
 protected:
 	void UpdateState(State state) override;

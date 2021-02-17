@@ -2,7 +2,9 @@
 
 #include <iostream>
 
-#include "ExpertSystem.hpp"
+//#include "ExpertSystemData.hpp"
+
+class ExpertSystemData;
 
 enum ExpressionType {
 	FACT,
@@ -31,18 +33,19 @@ public:
 
 	virtual ExpressionType GetType() const = 0;
 
+	[[nodiscard]] State GetState() const;
+
 	virtual bool operator==(const Expression &expression) const = 0;
 
 	virtual bool operator!=(const Expression &expression) const = 0;
 
-	virtual void Calculate(ExpertSystem &expert_system);
 
-	[[nodiscard]] State GetState() const;
+	virtual void Calculate(ExpertSystemData &expert_system_data);
 
 	virtual void UpdateState(State state);
 
 protected:
-	State state_;
+	State state_ { False };
 };
 
 std::ostream &operator<<(std::ostream &os, const Expression &expression);

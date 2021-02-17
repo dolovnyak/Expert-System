@@ -5,17 +5,19 @@
 extern int yychar;
 extern int yylex();
 
-void yyerror(const char *msg)
+void yyerror(ExpertSystemData *expert_system_data, const char *msg)
 {
     throw std::runtime_error("YACC EXCEPTION: " + std::string(msg) + ", lookahead token number " + std::to_string(yychar));
 }
 
 %}
 
-%union              A{
+%union              {
                     char fact;
                     Expression* expression;
                     }
+                    
+%parse-param        {ExpertSystemData *expert_system_data}
 
 %token              ES_IMPLIES
 %token              ES_MUTUAL_IMPLIES
@@ -62,13 +64,13 @@ MAIN_EXPRESSION:
                     EXPRESSION ES_IMPLIES EXPRESSION
                     {
                         Expression *main_expression(new BinaryExpression($1, BinaryOperator::IMPLIES, $3));
-                        MainExpressionsList::Instance().AddMainExpression(main_expression);
+                        expert_system_data->AddMainExpression(main_expression);
                         std::cout << *main_expression << std::endl;
                     }
                     | EXPRESSION ES_MUTUAL_IMPLIES EXPRESSION
                     {
                         Expression *main_expression(new BinaryExpression($1, BinaryOperator::MUTUAL_IMPLIES, $3));
-                        MainExpressionsList::Instance().AddMainExpression(main_expression);
+                        expert_system_data->AddMainExpression(main_expression);
                         std::cout << *main_expression << std::endl;
                     }
 
@@ -76,9 +78,9 @@ EXPRESSION:
                     ES_FACT
                     {
                         Expression *expression(new FactExpression($1));
-                        if (MainExpressionsList::Instance().Find(expression) != nullptr)
+                        if (expert_system_data->Find(expression) != nullptr)
                         {
-                            $$ = MainExpressionsList::Instance().Find(expression);
+                            $$ = expert_system_data->Find(expression);
                             delete expression;
                         }
                         else
@@ -88,9 +90,9 @@ EXPRESSION:
                     | ES_NOT EXPRESSION
                     {
                         Expression *expression(new UnaryExpression(UnaryOperator::NOT, $2));
-                        if (MainExpressionsList::Instance().Find(expression) != nullptr)
+                        if (expert_system_data->Find(expression) != nullptr)
                         {
-                            $$ = MainExpressionsList::Instance().Find(expression);
+                            $$ = expert_system_data->Find(expression);
                             delete expression;
                         }
                         else
@@ -100,9 +102,9 @@ EXPRESSION:
                     | EXPRESSION ES_OR EXPRESSION
                     {
                         Expression *expression(new BinaryExpression($1, BinaryOperator::OR, $3));
-                        if (MainExpressionsList::Instance().Find(expression) != nullptr)
+                        if (expert_system_data->Find(expression) != nullptr)
                         {
-                            $$ = MainExpressionsList::Instance().Find(expression);
+                            $$ = expert_system_data->Find(expression);
                             delete expression;
                         }
                         else
@@ -112,9 +114,9 @@ EXPRESSION:
                     | EXPRESSION ES_XOR EXPRESSION
                     {
                         Expression *expression(new BinaryExpression($1, BinaryOperator::XOR, $3));
-                        if (MainExpressionsList::Instance().Find(expression) != nullptr)
+                        if (expert_system_data->Find(expression) != nullptr)
                         {
-                            $$ = MainExpressionsList::Instance().Find(expression);
+                            $$ = expert_system_data->Find(expression);
                             delete expression;
                         }
                         else
@@ -124,9 +126,9 @@ EXPRESSION:
                     | EXPRESSION ES_AND EXPRESSION
                     {
                         Expression *expression(new BinaryExpression($1, BinaryOperator::AND, $3));
-                        if (MainExpressionsList::Instance().Find(expression) != nullptr)
+                        if (expert_system_data->Find(expression) != nullptr)
                         {
-                            $$ = MainExpressionsList::Instance().Find(expression);
+                            $$ = expert_system_data->Find(expression);
                             delete expression;
                         }
                         else

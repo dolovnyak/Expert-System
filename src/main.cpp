@@ -34,15 +34,13 @@ int main(int argc, char **argv)
 	}
 	
 	try {
-		ExpertSystem expert_system;
-
-		expert_system.Setup(open_file(argparse.get<std::string>("input_file")));
-		expert_system.Solve();
+		ExpertSystemData data = ExpertSystem::Parse(open_file(argparse.get<std::string>("input_file")));
+		ExpertSystem::Solve(data);
 
 		if (argparse.get<bool>("--visual")) {
-			Visualizer visualizer(expert_system);
+			Visualizer visualizer;
 			visualizer.SetupImGui();
-			visualizer.Show();
+			visualizer.Show(data);
 		}
 	}
 	catch (const std::exception &exception) {

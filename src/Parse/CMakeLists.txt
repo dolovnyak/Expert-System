@@ -12,7 +12,7 @@ set(YACC_INPUT "${CMAKE_CURRENT_SOURCE_DIR}/Grammar.yacc")
 set(YACC_CPP_OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/Grammar.yy.cpp")
 set(YACC_HPP_OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/Grammar.yy.hpp")
 
-set(INCLUDE_FOR_YACC_HEADER "#include \"MainExpressionsList.hpp\"")
+set(INCLUDE_FOR_YACC_HEADER "#include \"ExpertSystemData.hpp\"")
 
 # generate lex/yacc parse when build
 add_custom_target(parser_generator ALL

@@ -23,7 +23,7 @@ public:
 
 	[[nodiscard]] Expression *GetChild() const { return child_; }
 
-	void Calculate(ExpertSystem &expert_system) override;
+	void Calculate(ExpertSystemData &expert_system_data) override;
 
 protected:
 	void UpdateState(State state) override;

@@ -1,4 +1,5 @@
 #include "Expressions/BinaryExpression.hpp"
+#include "ExpertSystemData.hpp"
 
 BinaryExpression::BinaryExpression(Expression* left, BinaryOperator binaryOperator, Expression* right)
 		: left_child_(left), binary_operator_(binaryOperator), right_child_(right)
@@ -57,11 +58,11 @@ bool BinaryExpression::operator!=(const Expression& expression) const
 	return !(*this == expression);
 }
 
-void BinaryExpression::Calculate(ExpertSystem &expert_system) {
-	this->Expression::Calculate(expert_system);
+void BinaryExpression::Calculate(ExpertSystemData &expert_system_data) {
+	this->Expression::Calculate(expert_system_data);
 
-	left_child_->Calculate(expert_system);
-	right_child_->Calculate(expert_system);
+	left_child_->Calculate(expert_system_data);
+	right_child_->Calculate(expert_system_data);
 
 	// TODO implement
 	switch (binary_operator_) {
@@ -88,6 +89,10 @@ void BinaryExpression::UpdateState(Expression::State state) {
 			right_child_->UpdateState(state);
 			break;
 		case OR:
+			if (left_child_->GetState() < state && right_child_->GetState() < state) {
+				left_child_->UpdateState(Undetermined);
+				right_child_->UpdateState(Undetermined);
+			}
 			break;
 		case XOR:
 			break;

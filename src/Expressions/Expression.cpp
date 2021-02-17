@@ -1,4 +1,6 @@
 #include "Expressions/Expression.hpp"
+#include "ExpertSystem.hpp"
+#include "ExpertSystemData.hpp"
 
 std::ostream& operator<<(std::ostream& os, const Expression& expression)
 {
@@ -17,16 +19,16 @@ std::string Expression::GetStateName(Expression::State state) {
 	}
 }
 
-void Expression::Calculate(ExpertSystem &expert_system) {
-	for (const auto owner : expert_system.FindAllOwners(this)) {
-		owner->Calculate(expert_system);
+void Expression::Calculate(ExpertSystemData &expert_system_data) {
+	for (const auto owner : expert_system_data.FindAllMainKeepers(this)) {
+		owner->Calculate(expert_system_data);
 	}
 }
 
 void Expression::UpdateState(Expression::State state) {
 	if (state > state_) {
 		state_ = state;
-		// TODO logging
+		ExpertSystem::RaiseEvent(StateUpdatedEvent(this));
 	} else if (state < state_) {
 		// TODO error or something else
 	}

@@ -1,10 +1,13 @@
-#include "Visualizer.hpp"
-
 // TODO remove
 #include <iostream>
 
 #include <memory>
-#include "MainExpressionsList.hpp"
+
+#include "Visualizer.hpp"
+#include "ExpertSystemData.hpp"
+#include "Expressions/FactExpression.hpp"
+#include "Expressions/UnaryExpression.hpp"
+#include "Expressions/BinaryExpression.hpp"
 
 static void glfw_error_callback(int error, const char* description)
 {
@@ -62,12 +65,12 @@ void Visualizer::SetupImGui()
 	//IM_ASSERT(font != NULL);
 }
 
-void Visualizer::Show()
+void Visualizer::Show(const ExpertSystemData &expert_system_data)
 {
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-	CopyExpressionListToBuf();
-	UpdateNodesAndLinks();
+	CopyExpressionListToBuf(expert_system_data.GetMainExpressions());
+	UpdateNodesAndLinks(expert_system_data);
 
 	while (!glfwWindowShouldClose(window_))
 	{
@@ -93,18 +96,19 @@ void Visualizer::Show()
 		if (should_execute_) {
 			error = nullptr;
 			try {
+				ExpertSystemData data;
+
 				size_t s = strchr(buf, '\0') - buf;
 				if (s > 0) {
 					char *str = new char[s];
 					strncpy(str, buf, s);
 					FILE *f = fmemopen(str, s, "r");
-					owner_.Setup(f);
+					data = ExpertSystem::Parse(f);
+					ExpertSystem::Solve(data);
 					delete[] str;
-				} else {
-					MainExpressionsList::Instance().main_expressions_list_.clear();
 				}
 
-				UpdateNodesAndLinks();
+				UpdateNodesAndLinks(data);
 			} catch (const std::exception &exception) {
 				std::unique_ptr<std::string> error_local(new std::string(exception.what()));
 				error = std::move(error_local);
@@ -154,14 +158,14 @@ void Visualizer::ProcessNode(const std::shared_ptr<Node> &parent, const Expressi
 	}
 }
 
-void Visualizer::UpdateNodesAndLinks() {
+void Visualizer::UpdateNodesAndLinks(const ExpertSystemData &expert_system_data) {
 	local_id = 0;
 	nodes.clear();
 	links.clear();
 	expressions_.clear();
 
 	ImVec2 pos(50, 50);
-	for (const auto expression : MainExpressionsList::Instance().main_expressions_list_) {
+	for (const auto expression : expert_system_data.GetMainExpressions()) {
 		ProcessNode(nullptr, expression, pos);
 		pos = pos + ImVec2(0, 100);
 	}
@@ -288,10 +292,10 @@ void Visualizer::DrawInputWindow() {
 	ImGui::End();
 }
 
-void Visualizer::CopyExpressionListToBuf() {
+void Visualizer::CopyExpressionListToBuf(const std::vector<Expression *> &expressions) {
 	bzero(buf, IM_ARRAYSIZE(buf));
 	size_t i = 0;
-	for (const auto exp : MainExpressionsList::Instance().main_expressions_list_) {
+	for (const auto exp : expressions) {
 		std::string exp_str = exp->ToString();
 		size_t len = exp_str.size();
 		if (i + len + 1 >= IM_ARRAYSIZE(buf)) {
