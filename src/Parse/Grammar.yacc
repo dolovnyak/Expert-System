@@ -137,7 +137,15 @@ EXPRESSION:
                     }
                     | ES_OPEN_BRACKET EXPRESSION ES_CLOSE_BRACKET
                     {
-                        $$ = $2;
+                        Expression *expression(new UnaryExpression(UnaryOperator::PARENTHESES, $2));
+                        if (expert_system_data->Find(expression) != nullptr)
+                        {
+                            $$ = expert_system_data->Find(expression);
+                            delete expression;
+                        }
+                        else
+                            $$ = expression;
+                        std::cout << *$$ << std::endl;
                     }
 
 SET_TRUE_FACTS:
