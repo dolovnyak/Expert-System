@@ -21,12 +21,14 @@ public:
 	[[nodiscard]] std::string ToString() const override;
 
 	[[nodiscard]] ExpressionType GetType() const override;
-
+	
 	bool operator==(const Expression &expression) const override;
 
 	bool operator!=(const Expression &expression) const override;
 
 	[[nodiscard]] Expression *GetLeftChild() const { return left_child_; }
+	
+	[[nodiscard]] BinaryOperator GetBinaryOperator() const;
 
 	[[nodiscard]] Expression *GetRightChild() const { return right_child_; }
 

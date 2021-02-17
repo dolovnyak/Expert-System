@@ -23,7 +23,7 @@
 
 [\t\v\r\f ]+    {;}
 #[^\n]+[\n]     {return ES_SEPARATOR;}
-[\n]            {printf("NEW LINE\n");return ES_SEPARATOR;}
+[\n]            {return ES_SEPARATOR;}
 .               {throw std::runtime_error("LEX EXCEPTION: lexeme \"" + std::string(yytext) + "\" doesn't correct");}
 
 %%

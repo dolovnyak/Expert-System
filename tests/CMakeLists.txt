@@ -3,7 +3,16 @@ project(expert_system)
 
 find_package(GTest REQUIRED)
 
-add_executable(expert_system_tests)
+add_executable(expert_system_tests
+        ../src/ExpertSystem.cpp
+        ../src/ExpertSystemData.cpp
+        ../src/Expressions/Expression.cpp
+        ../src/Expressions/BinaryExpression.cpp
+        ../src/Expressions/UnaryExpression.cpp
+        ../src/Expressions/FactExpression.cpp
+        ../src/Parse/Grammar.yy.cpp
+        ../src/Parse/Lexer.ll.cpp
+        )
 
 include_directories(include
         ../expert-system/include)

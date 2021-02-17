@@ -17,9 +17,20 @@ ExpertSystemData ExpertSystem::Parse(FILE *file) {
 	return data;
 }
 
+ExpertSystemData ExpertSystem::Parse(char *str) {
+	FILE *file = fmemopen(str, strlen(str), "r");
+	
+	yyin = file;
+	ExpertSystemData data;
+	yyparse(&data);
+	fclose(file);
+
+	return data;
+}
+
 void ExpertSystem::Solve(ExpertSystemData &expert_system_data) {
-	for (const auto request : expert_system_data.GetQuery()) {
-		request->Calculate(expert_system_data);
+	for (Expression *fact : expert_system_data.GetFacts()) {
+		fact->Calculate(expert_system_data);
 	}
 }
 

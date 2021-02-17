@@ -9,10 +9,13 @@
 
 class ExpertSystemData {
 public:
-	Expression *Find(Expression *expression) const;
-	std::vector<Expression *> FindAllMainKeepers(Expression *expression) const;
-
+	~ExpertSystemData();
+	
 	void AddMainExpression(Expression *expression);
+	
+	Expression *Find(Expression *expression) const;
+	
+	std::vector<Expression *> FindAllImpliesExpressions(Expression *expression) const;
 
 	[[nodiscard]] const std::vector<Expression *> &GetMainExpressions() const;
 

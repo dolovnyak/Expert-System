@@ -30,13 +30,29 @@ const std::vector<Expression *> &ExpertSystemData::GetQuery() const {
 	return query_;
 }
 
-std::vector<Expression *> ExpertSystemData::FindAllMainKeepers(Expression *expression) const {
-	// TODO check
-	std::vector<Expression *> result(main_expressions_.size());
-	for (auto main_expression : main_expressions_) {
-		if (main_expression->Find(expression) != nullptr) {
-			result.push_back(expression);
+std::vector<Expression *> ExpertSystemData::FindAllImpliesExpressions(Expression *expression) const {
+	std::vector<Expression *> implies_expressions;
+	BinaryExpression *binary_main_expr;
+	
+	for (Expression *main_expression : main_expressions_) {
+		binary_main_expr = dynamic_cast<BinaryExpression *>(main_expression);
+		
+		if (binary_main_expr->GetBinaryOperator() == MUTUAL_IMPLIES) {
+			if (binary_main_expr->Find(expression) != nullptr) {
+				implies_expressions.push_back(main_expression);
+			}
+		}
+		else if (binary_main_expr->GetBinaryOperator() == IMPLIES) {
+			if (binary_main_expr->GetRightChild()->Find(expression) != nullptr) {
+				implies_expressions.push_back(main_expression);
+			}
 		}
 	}
-	return result;
+	
+	return implies_expressions;
+}
+
+ExpertSystemData::~ExpertSystemData()
+{
+	//TODO clear all data
 }

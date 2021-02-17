@@ -2,12 +2,14 @@
 #include <iostream>
 
 #include <memory>
+//#include <imgui_internal.h>
 
 #include "Visualizer.hpp"
 #include "ExpertSystemData.hpp"
 #include "Expressions/FactExpression.hpp"
 #include "Expressions/UnaryExpression.hpp"
 #include "Expressions/BinaryExpression.hpp"
+#include <imgui_internal.h>
 
 static void glfw_error_callback(int error, const char* description)
 {
@@ -97,17 +99,9 @@ void Visualizer::Show(const ExpertSystemData &expert_system_data)
 			error = nullptr;
 			try {
 				ExpertSystemData data;
-
-				size_t s = strchr(buf, '\0') - buf;
-				if (s > 0) {
-					char *str = new char[s];
-					strncpy(str, buf, s);
-					FILE *f = fmemopen(str, s, "r");
-					data = ExpertSystem::Parse(f);
-					ExpertSystem::Solve(data);
-					delete[] str;
-				}
-
+				data = ExpertSystem::Parse(buf);
+				ExpertSystem::Solve(data);
+				
 				UpdateNodesAndLinks(data);
 			} catch (const std::exception &exception) {
 				std::unique_ptr<std::string> error_local(new std::string(exception.what()));
@@ -282,8 +276,20 @@ void Visualizer::DrawInputWindow() {
 	ImGui::Begin("Input");
 
 	ImGui::InputTextMultiline("", buf, IM_ARRAYSIZE(buf));
-	if (ImGui::Button("Build")) {
+	bool is_executable = strlen(buf) != 0;
+	
+	if (!is_executable)
+	{
+		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+	}
+	if (ImGui::ButtonEx("Execute", ImVec2(0, 0))) {
 		should_execute_ = true;
+	}
+	if (!is_executable)
+	{
+		ImGui::PopItemFlag();
+		ImGui::PopStyleVar();
 	}
 	if (error != nullptr) {
 		ImGui::TextColored(ImVec4(1, 0, 0, 1), "%s", error->c_str());

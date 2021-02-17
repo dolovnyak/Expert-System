@@ -72,7 +72,7 @@ private:
 	ImVec2 scrolling = ImVec2(0.0f, 0.0f);
 	int node_selected = -1;
 
-	static const int BUF_SIZE = 1024;
+	static const int BUF_SIZE = 2048;
 	char buf[BUF_SIZE] = {0};
 	void CopyExpressionListToBuf(const std::vector<Expression *> &expressions);
 

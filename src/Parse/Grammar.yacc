@@ -85,7 +85,7 @@ EXPRESSION:
                         }
                         else
                             $$ = expression;
-                        std::cout << *$$ << std::endl;
+                        std::cout << *$$ << std::endl; //TODO del
                     }
                     | ES_NOT EXPRESSION
                     {
@@ -97,7 +97,7 @@ EXPRESSION:
                         }
                         else
                             $$ = expression;
-                        std::cout << *$$ << std::endl;
+                        std::cout << *$$ << std::endl; //TODO del
                     }
                     | EXPRESSION ES_OR EXPRESSION
                     {
@@ -109,7 +109,7 @@ EXPRESSION:
                         }
                         else
                             $$ = expression;
-                        std::cout << *$$ << std::endl;
+                        std::cout << *$$ << std::endl; //TODO del
                     }
                     | EXPRESSION ES_XOR EXPRESSION
                     {
@@ -121,7 +121,7 @@ EXPRESSION:
                         }
                         else
                             $$ = expression;
-                        std::cout << *$$ << std::endl;
+                       std::cout << *$$ << std::endl; //TODO del
                     }
                     | EXPRESSION ES_AND EXPRESSION
                     {
@@ -133,7 +133,7 @@ EXPRESSION:
                         }
                         else
                             $$ = expression;
-                        std::cout << *$$ << std::endl;
+                        std::cout << *$$ << std::endl; //TODO del
                     }
                     | ES_OPEN_BRACKET EXPRESSION ES_CLOSE_BRACKET
                     {
@@ -145,7 +145,7 @@ EXPRESSION:
                         }
                         else
                             $$ = expression;
-                        std::cout << *$$ << std::endl;
+                        std::cout << *$$ << std::endl; //TODO del
                     }
 
 SET_TRUE_FACTS:

@@ -20,8 +20,8 @@ std::string Expression::GetStateName(Expression::State state) {
 }
 
 void Expression::Calculate(ExpertSystemData &expert_system_data) {
-	for (const auto owner : expert_system_data.FindAllMainKeepers(this)) {
-		owner->Calculate(expert_system_data);
+	for (Expression *main_expression : expert_system_data.FindAllImpliesExpressions(this)) {
+		main_expression->Calculate(expert_system_data);
 	}
 }
 

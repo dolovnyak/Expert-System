@@ -103,4 +103,8 @@ void BinaryExpression::UpdateState(Expression::State state) {
 	}
 }
 
+BinaryOperator BinaryExpression::GetBinaryOperator() const {
+	return binary_operator_;
+}
+
 
