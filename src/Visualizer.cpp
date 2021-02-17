@@ -166,8 +166,8 @@ void Visualizer::UpdateNodesAndLinks(const ExpertSystemData &expert_system_data)
 }
 
 void Visualizer::DrawGraphWindow() {
-	ImGui::SetNextWindowPos(ImVec2(PADDING_X, PADDING_Y));
-	ImGui::SetNextWindowSize(ImVec2(GRAPH_WINDOW_WIDTH, GRAPH_WINDOW_HEIGHT));
+	ImGui::SetNextWindowPos(ImVec2(PADDING_X, PADDING_Y), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(GRAPH_WINDOW_WIDTH, GRAPH_WINDOW_HEIGHT), ImGuiCond_FirstUseEver);
 
 	ImGui::Begin("Graph");
 	ImGuiIO& io = ImGui::GetIO();
@@ -271,11 +271,11 @@ void Visualizer::DrawGraphWindow() {
 }
 
 void Visualizer::DrawInputWindow() {
-	ImGui::SetNextWindowPos(ImVec2(GRAPH_WINDOW_WIDTH + 2 * PADDING_X, PADDING_Y));
+	ImGui::SetNextWindowPos(ImVec2(GRAPH_WINDOW_WIDTH + 2 * PADDING_X, PADDING_Y), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowSize(ImVec2(INPUT_WINDOW_WIDTH, INPUT_WINDOW_HEIGHT));
+	
 	ImGui::Begin("Input");
-
-	ImGui::InputTextMultiline("", buf, IM_ARRAYSIZE(buf));
+	ImGui::InputTextMultiline("", buf, IM_ARRAYSIZE(buf), ImVec2(INPUT_WINDOW_WIDTH - 30, INPUT_WINDOW_HEIGHT * 0.8));
 	bool is_executable = strlen(buf) != 0;
 	
 	if (!is_executable)
