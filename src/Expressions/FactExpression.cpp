@@ -32,3 +32,7 @@ bool FactExpression::operator==(const Expression &expression) const {
 bool FactExpression::operator!=(const Expression &expression) const {
 	return !(*this == expression);
 }
+
+char FactExpression::GetFact() const {
+	return fact_;
+}

@@ -19,8 +19,10 @@
 
 #define GRAPH_WINDOW_WIDTH 800
 #define GRAPH_WINDOW_HEIGHT 600
-#define INPUT_WINDOW_WIDTH 400
-#define INPUT_WINDOW_HEIGHT 300
+#define INPUT_WINDOW_WIDTH 300
+#define INPUT_WINDOW_HEIGHT 170
+#define FACTS_WINDOW_WIDTH 200
+#define FACTS_WINDOW_HEIGHT 420
 #define PADDING_X 10
 #define PADDING_Y 10
 
@@ -84,6 +86,6 @@ private:
 	void UpdateNodesAndLinks(const ExpertSystemData &expert_system_data);
 
 	void DrawGraphWindow();
-
 	void DrawInputWindow();
+	void DrawFactsWindow(const ExpertSystemData &data);
 };

@@ -16,6 +16,8 @@ public:
 
 	bool operator!=(const Expression &expression) const override;
 
+	char GetFact() const;
+
 private:
 	char fact_;
 };

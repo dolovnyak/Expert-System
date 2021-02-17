@@ -95,11 +95,22 @@ void BinaryExpression::UpdateState(Expression::State state) {
 			}
 			break;
 		case XOR:
+//			bool equals = left_child_->GetState() != Undetermined && left_child_->GetState() == right_child_->GetState();
+//			if (state == Undetermined) {
+//
+//				if (!equals) {
+//					left_child_->UpdateState(True);
+//					right_child_->UpdateState(True);
+//				}
+//			} else if (state == True) {
+//				if (equals) {
+//
+//				}
+//			}
 			break;
 		case IMPLIES:
-			break;
 		case MUTUAL_IMPLIES:
-			break;
+			throw std::logic_error("Must be not reachable");
 	}
 }
 

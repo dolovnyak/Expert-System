@@ -69,6 +69,8 @@ void Visualizer::SetupImGui()
 
 void Visualizer::Show(const ExpertSystemData &expert_system_data)
 {
+	ExpertSystemData data = expert_system_data;
+
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 	CopyExpressionListToBuf(expert_system_data.GetMainExpressions());
@@ -84,6 +86,7 @@ void Visualizer::Show(const ExpertSystemData &expert_system_data)
 
 		DrawGraphWindow();
 		DrawInputWindow();
+		DrawFactsWindow(data);
 
 		ImGui::Render();
 		int display_w, display_h;
@@ -98,7 +101,6 @@ void Visualizer::Show(const ExpertSystemData &expert_system_data)
 		if (should_execute_) {
 			error = nullptr;
 			try {
-				ExpertSystemData data;
 				data = ExpertSystem::Parse(buf);
 				ExpertSystem::Solve(data);
 				
@@ -165,6 +167,17 @@ void Visualizer::UpdateNodesAndLinks(const ExpertSystemData &expert_system_data)
 	}
 }
 
+static inline ImVec4 GetColor(Expression::State state) {
+	switch (state) {
+		case Expression::False:
+			return { 1, 0, 0, 1 };
+		case Expression::Undetermined:
+			return { 0.66f, 0.66f, 0.66f, 1 };
+		case Expression::True:
+			return { 0, 0, 1, 1 };
+	}
+}
+
 void Visualizer::DrawGraphWindow() {
 	ImGui::SetNextWindowPos(ImVec2(PADDING_X, PADDING_Y), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowSize(ImVec2(GRAPH_WINDOW_WIDTH, GRAPH_WINDOW_HEIGHT), ImGuiCond_FirstUseEver);
@@ -210,18 +223,7 @@ void Visualizer::DrawGraphWindow() {
 		ImGui::Text("%s", node->Name.c_str());
 		ImGui::Text("State:");
 		ImGui::SameLine();
-		ImVec4 color;
-		switch (node->State) {
-			case Expression::False:
-				color = { 1, 0, 0, 1 };
-				break;
-			case Expression::Undetermined:
-				color = { 0.66f, 0.66f, 0.66f, 1 };
-				break;
-			case Expression::True:
-				color = { 0, 0, 1, 1 };
-				break;
-		}
+		ImVec4 color = GetColor(node->State);
 		ImGui::TextColored(color, "%s", Expression::GetStateName(node->State).c_str());
 		ImGui::EndGroup();
 
@@ -311,6 +313,27 @@ void Visualizer::CopyExpressionListToBuf(const std::vector<Expression *> &expres
 		i += len + 1;
 		buf[i - 1] = '\n';
 	}
+}
+
+void Visualizer::DrawFactsWindow(const ExpertSystemData &data) {
+	ImGui::SetNextWindowPos(ImVec2(GRAPH_WINDOW_WIDTH + 2 * PADDING_X, INPUT_WINDOW_HEIGHT + 2 * PADDING_Y));
+	ImGui::SetNextWindowSize(ImVec2(FACTS_WINDOW_WIDTH, FACTS_WINDOW_HEIGHT));
+
+	ImGui::Begin("Facts");
+	for (char f = 'A'; f <= 'Z'; ++f) {
+		auto it = std::find_if(data.GetFacts().begin(), data.GetFacts().end(), [f](Expression *e) {
+			auto fe = dynamic_cast<FactExpression *>(e);
+			return fe != nullptr && fe->GetFact() == f;
+		});
+		ImGui::Text("%c", f);
+		ImGui::SameLine();
+		if (it != data.GetFacts().end()) {
+			ImGui::TextColored(GetColor((*it)->GetState()), "%s", Expression::GetStateName((*it)->GetState()).c_str());
+		} else {
+			ImGui::Text("-");
+		}
+	}
+	ImGui::End();
 }
 
 

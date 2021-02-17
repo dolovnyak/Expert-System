@@ -3,9 +3,7 @@
 #include "ExpertSystemData.hpp"
 
 UnaryExpression::UnaryExpression(UnaryOperator unaryOperator, Expression* child)
-		: unary_operator_(unaryOperator), child_(child)
-{
-}
+		: unary_operator_(unaryOperator), child_(child) {}
 
 Expression* UnaryExpression::Find(Expression* expression)
 {
