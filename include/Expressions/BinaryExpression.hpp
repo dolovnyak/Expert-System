@@ -41,8 +41,9 @@ private:
 	Expression *left_child_;
 	Expression *right_child_;
 	BinaryOperator binary_operator_;
-
+	
 	[[nodiscard]] static std::string GetString(BinaryOperator binaryOperator) ;
+	Expression::State BinaryExpression::GetStateFromChildren(Expression *left_children, Expression *right_children);
 };
 
 

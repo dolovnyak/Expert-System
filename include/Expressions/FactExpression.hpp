@@ -15,6 +15,8 @@ public:
 	bool operator==(const Expression &expression) const override;
 
 	bool operator!=(const Expression &expression) const override;
+	
+	void Calculate(ExpertSystemData& expert_system_data) override;
 
 	char GetFact() const;
 

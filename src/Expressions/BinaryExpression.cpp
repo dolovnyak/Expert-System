@@ -58,8 +58,22 @@ bool BinaryExpression::operator!=(const Expression& expression) const
 	return !(*this == expression);
 }
 
+Expression::State BinaryExpression::GetStateFromChildren(Expression *left_children, Expression *right_children)
+{
+	switch (binary_operator_) {
+		case AND:
+			if (left_children->GetState() == right_children->GetState())
+				return left_children->GetState();
+		case OR:
+			break;
+		case XOR:
+			break;
+}
+
 void BinaryExpression::Calculate(ExpertSystemData &expert_system_data) {
-	this->Expression::Calculate(expert_system_data);
+	if (is_calculated_)
+		return;
+	is_calculated_ = true;
 
 	left_child_->Calculate(expert_system_data);
 	right_child_->Calculate(expert_system_data);
@@ -67,14 +81,17 @@ void BinaryExpression::Calculate(ExpertSystemData &expert_system_data) {
 	// TODO implement
 	switch (binary_operator_) {
 		case AND:
-			break;
+			left_child_->GetState()
 		case OR:
 			break;
 		case XOR:
 			break;
 		case IMPLIES:
+			right_child_->UpdateState(left_child_->GetState());
 			break;
 		case MUTUAL_IMPLIES:
+			right_child_->UpdateState(left_child_->GetState());
+			left_child_->UpdateState(right_child_->GetState());
 			break;
 	}
 }

@@ -58,8 +58,6 @@ static inline Expression::State ApplyNot(Expression::State state) {
 }
 
 void UnaryExpression::Calculate(ExpertSystemData &expert_system_data) {
-	this->Expression::Calculate(expert_system_data);
-
 	child_->Calculate(expert_system_data);
 	switch (unary_operator_) {
 		case NOT:

@@ -1,4 +1,5 @@
 #include "Expressions/FactExpression.hpp"
+#include "ExpertSystemData.hpp"
 
 FactExpression::FactExpression(char fact)
 		: fact_(fact) {}
@@ -35,4 +36,15 @@ bool FactExpression::operator!=(const Expression &expression) const {
 
 char FactExpression::GetFact() const {
 	return fact_;
+}
+
+void FactExpression::Calculate(ExpertSystemData &expert_system_data)
+{
+	if (is_calculated_)
+		return;
+	
+	std::vector<Expression *> implies_which_contains_expression = expert_system_data.FindAllImpliesExpressions(this);
+	for (Expression *implies_expression : implies_which_contains_expression) {
+		implies_expression->Calculate(expert_system_data);
+	}
 }

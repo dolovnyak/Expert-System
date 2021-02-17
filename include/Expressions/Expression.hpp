@@ -39,13 +39,14 @@ public:
 
 	virtual bool operator!=(const Expression &expression) const = 0;
 
-
-	virtual void Calculate(ExpertSystemData &expert_system_data);
+//	virtual void Calculate(ExpertSystemData &expert_system_data, std::vector<Expression *> ) = 0;
+	virtual void Calculate(ExpertSystemData &expert_system_data) = 0;
 
 	virtual void UpdateState(State state);
 
 protected:
 	State state_ { False };
+	bool is_calculated_ = false;
 };
 
 std::ostream &operator<<(std::ostream &os, const Expression &expression);

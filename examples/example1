@@ -3,7 +3,7 @@
 # shown here. spacing is not important
 C => E              # C implies E
 A + (B + C) => D    # A and B and C implies D
-A | B => C          # A or B implies C
+A | B => C | L      # A or B implies C
 C => E              # C implies E
 A + !B => F         # A and not B implies F
 C | !G => H         # C or not G implies H
@@ -20,3 +20,19 @@ A + B <=> !C        # A and B if and only if not C
                     # by a newline is used
 
 ?GVX                # Queries : What are G, V and X ?
+
+
+A | B => C | L      # A or B implies C
+M => A | B
+D => (A | B) + C
+J => A
+A | B => J      # A or B implies C
+P => B
+A + B <=> C         # A and B if and only if C
+A + B <=> !C        # A and B if and only if not C
+
+
+
+
+J => A
+A | B => J      # A or B implies C
