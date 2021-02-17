@@ -94,5 +94,5 @@ void UnaryExpression::UpdateState(Expression::State state) {
 			break;
 	}
 
-	child_->UpdateState(state);
+	child_->UpdateState(child_new_state);
 }

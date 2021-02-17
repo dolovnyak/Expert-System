@@ -41,6 +41,8 @@ int main(int argc, char **argv)
 			Visualizer visualizer;
 			visualizer.SetupImGui();
 			visualizer.Show(data);
+		} else {
+			// TODO print solution
 		}
 	}
 	catch (const std::exception &exception) {
