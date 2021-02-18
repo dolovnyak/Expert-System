@@ -63,76 +63,37 @@ SEPARATORS:
 MAIN_EXPRESSION:
                     EXPRESSION ES_IMPLIES EXPRESSION
                     {
-                        Expression *main_expression(new BinaryExpression($1, BinaryOperator::IMPLIES, $3));
-                        expert_system_data->AddMainExpression(main_expression);
+                        expert_system_data->AddMainExpression(new BinaryExpression($1, BinaryOperator::IMPLIES, $3));
                     }
                     | EXPRESSION ES_MUTUAL_IMPLIES EXPRESSION
                     {
-                        Expression *main_expression(new BinaryExpression($1, BinaryOperator::MUTUAL_IMPLIES, $3));
-                        expert_system_data->AddMainExpression(main_expression);
+                        expert_system_data->AddMainExpression(new BinaryExpression($1, BinaryOperator::MUTUAL_IMPLIES, $3));
                     }
 
 EXPRESSION:
                     ES_FACT
                     {
-                        Expression *expression(new FactExpression($1));
-                        $$ = expert_system_data->Find(expression);
-                        delete expression;
+                        $$ = expert_system_data->Find(new FactExpression($1));
                     }
                     | ES_NOT EXPRESSION
                     {
-                        Expression *expression(new UnaryExpression(UnaryOperator::NOT, $2));
-                        if (expert_system_data->Find(expression) != nullptr)
-                        {
-                            $$ = expert_system_data->Find(expression);
-                            delete expression;
-                        }
-                        else
-                            $$ = expression;
+                        $$ = expert_system_data->Find(new UnaryExpression(UnaryOperator::NOT, $2));
                     }
                     | EXPRESSION ES_OR EXPRESSION
                     {
-                        Expression *expression(new BinaryExpression($1, BinaryOperator::OR, $3));
-                        if (expert_system_data->Find(expression) != nullptr)
-                        {
-                            $$ = expert_system_data->Find(expression);
-                            delete expression;
-                        }
-                        else
-                            $$ = expression;
+                        $$ = expert_system_data->Find(new BinaryExpression($1, BinaryOperator::OR, $3));
                     }
                     | EXPRESSION ES_XOR EXPRESSION
                     {
-                        Expression *expression(new BinaryExpression($1, BinaryOperator::XOR, $3));
-                        if (expert_system_data->Find(expression) != nullptr)
-                        {
-                            $$ = expert_system_data->Find(expression);
-                            delete expression;
-                        }
-                        else
-                            $$ = expression;
+                        $$ = expert_system_data->Find(new BinaryExpression($1, BinaryOperator::XOR, $3));
                     }
                     | EXPRESSION ES_AND EXPRESSION
                     {
-                        Expression *expression(new BinaryExpression($1, BinaryOperator::AND, $3));
-                        if (expert_system_data->Find(expression) != nullptr)
-                        {
-                            $$ = expert_system_data->Find(expression);
-                            delete expression;
-                        }
-                        else
-                            $$ = expression;
+                        $$ = expert_system_data->Find(new BinaryExpression($1, BinaryOperator::AND, $3));
                     }
                     | ES_OPEN_BRACKET EXPRESSION ES_CLOSE_BRACKET
                     {
-                        Expression *expression(new UnaryExpression(UnaryOperator::PARENTHESES, $2));
-                        if (expert_system_data->Find(expression) != nullptr)
-                        {
-                            $$ = expert_system_data->Find(expression);
-                            delete expression;
-                        }
-                        else
-                            $$ = expression;
+                        $$ = expert_system_data->Find(new UnaryExpression(UnaryOperator::PARENTHESES, $2));
                     }
 
 SET_TRUE_FACTS:
@@ -142,16 +103,12 @@ SET_TRUE_FACTS:
 TRUE_FACTS:
                     ES_FACT TRUE_FACTS
                     {
-                        Expression *expression(new FactExpression($1));
-                        expert_system_data->Find(expression)->UpdateState(Expression::State::True);
-                        delete expression;
+                        expert_system_data->Find(new FactExpression($1))->UpdateState(Expression::State::True);
                         std::cout << "SET TRUE FACT " << $1 << std::endl;
                     }
                     | ES_FACT
                     {
-                        Expression *expression(new FactExpression($1));
-                        expert_system_data->Find(expression)->UpdateState(Expression::State::True);
-                        delete expression;
+                        expert_system_data->Find(new FactExpression($1))->UpdateState(Expression::State::True);
                         $$ = $1;
                         std::cout << "SET TURE FACT " << $1 << std::endl;
                     }
@@ -163,12 +120,14 @@ SET_QUESTION_FACTS:
 QUESTION_FACTS:
                     ES_FACT QUESTION_FACTS
                     {
+                        expert_system_data->AddQueryExpression(expert_system_data->Find(new FactExpression($1)));
                         std::cout << "SET QUESTION FACT " << $1 << std::endl;
                     }
                     | ES_FACT
                     {
-                        std::cout << "SET QUESTION FACT " << $1 << std::endl;
+                        expert_system_data->AddQueryExpression(expert_system_data->Find(new FactExpression($1)));
                         $$ = $1;
+                        std::cout << "SET QUESTION FACT " << $1 << std::endl;
                     }
 
 %%

@@ -292,7 +292,7 @@ void Visualizer::DrawInputWindow() {
 	ImGui::End();
 }
 
-void Visualizer::CopyExpressionListToBuf(const std::vector<Expression *> &expressions) {
+void Visualizer::CopyExpressionListToBuf(const ExpertSystemData::ExpressionsSet &expressions) {
 	bzero(buf, IM_ARRAYSIZE(buf));
 	size_t i = 0;
 	for (const auto exp : expressions) {

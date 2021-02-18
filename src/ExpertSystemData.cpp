@@ -2,63 +2,44 @@
 
 #include "ExpertSystemData.hpp"
 
-Expression *ExpertSystemData::Find(Expression *expression) const {
-	for (Expression *item : main_expressions_) {
-		Expression *find_result = item->Find(expression);
-		if (find_result != nullptr)
-			return find_result;
+Expression *ExpertSystemData::Find(Expression *expression) {
+	auto it = unique_expressions_.find(expression);
+	
+	if (it != unique_expressions_.end()) {
+		delete expression;
+		return *it;
 	}
-	if (expression->GetType() == ExpressionType::FACT) {
-		for (Expression *fact_expression : facts_) {
-			if (*fact_expression == *expression)
-				return fact_expression;
-		}
-		throw std::logic_error("there is no fact '" + expression->ToString() + "' in ExpertSystemData.facts_");
-	}
-	return nullptr;
+	unique_expressions_.insert(expression);
+	return expression;
 }
 
 void ExpertSystemData::AddMainExpression(Expression *expression) {
-	if (Find(expression) != nullptr) //if two identical rules
-		return;
+	expression = Find(expression);
+	main_expressions_.insert(expression);
 
-	main_expressions_.push_back(expression);
-
-	std::stack<Expression *> stack;
-	stack.push(expression);
-	while (!stack.empty()) {
-	    Expression *cur = stack.top();
-	    stack.pop();
-
-	    unique_expressions_.insert(cur);
-	    switch (cur->GetType()) {
-            case FACT:
-                break;
-            case UNARY: {
-                auto unary = dynamic_cast<UnaryExpression *>(cur);
-                stack.push(unary->GetChild());
-                break;
-            }
-            case BINARY: {
-                auto binary = dynamic_cast<BinaryExpression *>(cur);
-                stack.push(binary->GetLeftChild());
-                stack.push(binary->GetRightChild());
-                break;
-            }
-        }
-	}
-}
-
-const std::vector<Expression *> &ExpertSystemData::GetMainExpressions() const {
-	return main_expressions_;
-}
-
-const std::vector<Expression *> &ExpertSystemData::GetFacts() const {
-	return facts_;
-}
-
-const std::vector<Expression *> &ExpertSystemData::GetQuery() const {
-	return query_;
+//	std::stack<Expression *> stack;
+//	stack.push(expression);
+//	while (!stack.empty()) {
+//	    Expression *cur = stack.top();
+//	    stack.pop();
+//
+//	    unique_expressions_.insert(cur);
+//	    switch (cur->GetType()) {
+//            case FACT:
+//                break;
+//            case UNARY: {
+//                auto unary = dynamic_cast<UnaryExpression *>(cur);
+//                stack.push(unary->GetChild());
+//                break;
+//            }
+//            case BINARY: {
+//                auto binary = dynamic_cast<BinaryExpression *>(cur);
+//                stack.push(binary->GetLeftChild());
+//                stack.push(binary->GetRightChild());
+//                break;
+//            }
+//        }
+//	}
 }
 
 std::vector<Expression *> ExpertSystemData::FindAllImpliesExpressions(Expression *expression) const {
@@ -87,7 +68,7 @@ ExpertSystemData::ExpertSystemData()
 {
 	for (int i = 'A'; i <= 'Z'; i++) {
 	    auto fact = new FactExpression(static_cast<char>(i));
-		facts_.push_back(fact);
+		facts_.insert(fact);
 		unique_expressions_.insert(fact);
 	}
 }
@@ -97,5 +78,24 @@ ExpertSystemData::~ExpertSystemData() {
         delete e;
     }
     unique_expressions_.clear();
+}
+
+void ExpertSystemData::AddQueryExpression(Expression* expression) {
+	queries_.insert(expression);
+}
+
+const ExpertSystemData::ExpressionsSet& ExpertSystemData::GetQueries() const
+{
+	return queries_;
+}
+
+const ExpertSystemData::ExpressionsSet& ExpertSystemData::GetFacts() const
+{
+	return facts_;
+}
+
+const ExpertSystemData::ExpressionsSet& ExpertSystemData::GetMainExpressions() const
+{
+	return main_expressions_;
 }
 

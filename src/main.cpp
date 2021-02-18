@@ -42,7 +42,9 @@ int main(int argc, char **argv)
 			visualizer.SetupImGui();
 			visualizer.Show(data);
 		} else {
-			// TODO print solution
+			for (Expression *expression : data->GetQueries()) {
+				std::cout << *expression << " = " << Expression::GetStateName(expression->GetState()) << std::endl;
+			}
 		}
 	}
 	catch (const std::exception &exception) {
