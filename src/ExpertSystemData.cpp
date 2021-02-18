@@ -1,7 +1,5 @@
 #include "ExpertSystemData.hpp"
 
-#include <utility>
-
 Expression *ExpertSystemData::Find(Expression *expression) const {
 	for (Expression *item : main_expressions_) {
 		Expression *find_result = item->Find(expression);
@@ -23,6 +21,10 @@ void ExpertSystemData::AddMainExpression(Expression *expression) {
 		return;
 
 	main_expressions_.push_back(expression);
+}
+
+void ExpertSystemData::AddExpression(Expression *expression) {
+    unique_expressions_.insert(expression);
 }
 
 const std::vector<Expression *> &ExpertSystemData::GetMainExpressions() const {
@@ -66,8 +68,9 @@ ExpertSystemData::ExpertSystemData()
 	}
 }
 
-ExpertSystemData::~ExpertSystemData()
-{
-	//TODO clear all data
+ExpertSystemData::~ExpertSystemData() {
+    for (auto ue : unique_expressions_) {
+        delete ue;
+    }
 }
 
