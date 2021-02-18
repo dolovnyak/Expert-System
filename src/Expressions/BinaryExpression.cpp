@@ -88,7 +88,7 @@ void BinaryExpression::Calculate(ExpertSystemData &expert_system_data) {
 			left_child_->Calculate(expert_system_data);
 			right_child_->Calculate(expert_system_data);
 			if (state_ == True && right_child_->GetState() == True && left_child_->GetState() == True)
-				throw std::logic_error("logic contradiction");
+				throw std::runtime_error("logic contradiction");
 			if (left_child_->GetState() == Undetermined || right_child_->GetState() == Undetermined)
 				state_from_childs = Undetermined;
 			else if (left_child_->GetState() == right_child_->GetState())
@@ -116,7 +116,6 @@ void BinaryExpression::Calculate(ExpertSystemData &expert_system_data) {
 void BinaryExpression::UpdateState(Expression::State state) {
 	this->Expression::UpdateState(state);
 
-	// TODO implement
 	switch (binary_operator_) {
 		case AND:
 			left_child_->UpdateState(state);
@@ -129,6 +128,8 @@ void BinaryExpression::UpdateState(Expression::State state) {
 			}
 			break;
 		case XOR:
+//			if (left_child_->GetState())
+		
 //			bool equals = left_child_->GetState() != Undetermined && left_child_->GetState() == right_child_->GetState();
 //			if (state == Undetermined) {
 //

@@ -35,8 +35,6 @@ void Expression::UpdateState(Expression::State state) {
 	if (state > state_) {
 		state_ = state;
 		ExpertSystem::RaiseEvent(StateUpdatedEvent(this));
-	} else if (state < state_) {
-//		throw std::runtime_error("logic contradiction");
 	}
 }
 
@@ -44,7 +42,6 @@ Expression::State Expression::GetState() const {
 	return state_;
 }
 
-bool Expression::IsCalculated() const
-{
+bool Expression::IsCalculated() const {
 	return is_calculated_;
 }

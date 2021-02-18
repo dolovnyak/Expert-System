@@ -14,7 +14,7 @@ void yyerror(ExpertSystemData *expert_system_data, const char *msg)
 
 %union              {
                     char fact;
-                    Expression* expression;
+                    Expression *expression;
                     }
                     
 %parse-param        {ExpertSystemData *expert_system_data}

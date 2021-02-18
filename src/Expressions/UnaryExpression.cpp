@@ -91,6 +91,8 @@ void UnaryExpression::UpdateState(Expression::State state) {
 	State child_new_state;
 	switch (unary_operator_) {
 		case NOT:
+			if (state_ == True && child_->GetState() == True)
+				throw std::runtime_error("logic contradiction");
 			child_new_state = ApplyNot(state);
 			break;
 		case PARENTHESES:

@@ -90,12 +90,12 @@ void Visualizer::Show(const ExpertSystemData &expert_system_data)
 			try {
 				data = ExpertSystem::Parse(buf);
 				ExpertSystem::Solve(data);
-				
-				UpdateNodesAndLinks(data);
 			} catch (const std::exception &exception) {
 				std::unique_ptr<std::string> error_local(new std::string(exception.what()));
 				error = std::move(error_local);
+				data = ExpertSystemData();
 			}
+			UpdateNodesAndLinks(data);
 			should_execute_ = false;
 		}
 	}
