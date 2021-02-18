@@ -74,14 +74,14 @@ void BinaryExpression::Calculate(ExpertSystemData &expert_system_data) {
 		case AND:
 			left_child_->Calculate(expert_system_data);
 			right_child_->Calculate(expert_system_data);
-			state_ = Expression::GetMinState(left_child_->GetState(), right_child_->GetState()) > state_ ?
-					Expression::GetMinState(left_child_->GetState(), right_child_->GetState()) : state_;
+			state_from_childs = Expression::GetMinState(left_child_->GetState(), right_child_->GetState());
+			state_ = state_from_childs > state_ ? state_from_childs : state_;
 			break;
 		case OR:
 			left_child_->Calculate(expert_system_data);
 			right_child_->Calculate(expert_system_data);
-			state_ = Expression::GetMaxState(left_child_->GetState(), right_child_->GetState()) > state_ ?
-					 Expression::GetMaxState(left_child_->GetState(), right_child_->GetState()) : state_;
+			state_from_childs = Expression::GetMaxState(left_child_->GetState(), right_child_->GetState());
+			state_ = state_from_childs > state_ ? state_from_childs : state_;
 			break;
 		case XOR:
 			left_child_->Calculate(expert_system_data);
@@ -90,10 +90,11 @@ void BinaryExpression::Calculate(ExpertSystemData &expert_system_data) {
 				throw std::logic_error("logic contradiction");
 			if (left_child_->GetState() == Undetermined || right_child_->GetState() == Undetermined)
 				state_from_childs = Undetermined;
-			else if ()
-				state_from_childs = left_child_->GetState();
+			else if (left_child_->GetState() == right_child_->GetState())
+				state_from_childs = False;
+			else
+				state_from_childs = True;
 			state_ = state_from_childs > state_ ? state_from_childs : state_;
-			//TODO ?????????
 			break;
 		case IMPLIES:
 			state_ = True;
