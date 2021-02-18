@@ -18,7 +18,7 @@ public:
 	
 	void Calculate(ExpertSystemData& expert_system_data) override;
 
-	char GetFact() const;
+	[[nodiscard]] char GetFact() const;
 
 private:
 	char fact_;

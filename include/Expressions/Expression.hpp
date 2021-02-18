@@ -31,9 +31,9 @@ public:
 
 	virtual Expression *Find(Expression *expression) = 0;
 
-	virtual std::string ToString() const = 0;
+	[[nodiscard]] virtual std::string ToString() const = 0;
 
-	virtual ExpressionType GetType() const = 0;
+	[[nodiscard]] virtual ExpressionType GetType() const = 0;
 
 	[[nodiscard]] State GetState() const;
 	

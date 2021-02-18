@@ -29,7 +29,7 @@ ExpertSystemData ExpertSystem::Parse(char *str) {
 }
 
 void ExpertSystem::Solve(ExpertSystemData &expert_system_data) {
-	for (Expression *fact : expert_system_data.GetFacts()) {
+	for (auto &fact : expert_system_data.GetFacts()) {
 		fact->Calculate(expert_system_data);
 	}
 }
