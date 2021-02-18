@@ -26,11 +26,11 @@ public:
 
 	bool operator!=(const Expression &expression) const override;
 
-	[[nodiscard]] const std::shared_ptr<Expression> &GetLeftChild() const { return left_child_; }
+	[[nodiscard]] Expression *GetLeftChild() const { return left_child_; }
 	
 	[[nodiscard]] BinaryOperator GetBinaryOperator() const;
 
-	[[nodiscard]] const std::shared_ptr<Expression> &GetRightChild() const { return right_child_; }
+	[[nodiscard]] Expression *GetRightChild() const { return right_child_; }
 
 	void Calculate(ExpertSystemData &expert_system_data) override;
 
@@ -38,8 +38,8 @@ protected:
 	void UpdateState(State state) override;
 
 private:
-    std::shared_ptr<Expression> left_child_;
-    std::shared_ptr<Expression> right_child_;
+	Expression *left_child_;
+	Expression *right_child_;
 	BinaryOperator binary_operator_;
 	
 	[[nodiscard]] static std::string GetString(BinaryOperator binaryOperator) ;

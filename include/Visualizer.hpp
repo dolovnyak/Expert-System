@@ -77,7 +77,7 @@ private:
 
 	static const int BUF_SIZE = 2048;
 	char buf[BUF_SIZE] = {0};
-	void CopyExpressionListToBuf(const std::vector<std::shared_ptr<Expression>> &expressions);
+ 	void CopyExpressionListToBuf(const std::vector<Expression *> &expressions);
 
 	bool should_execute_ = false;
 

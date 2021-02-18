@@ -21,7 +21,7 @@ public:
 
 	bool operator!=(const Expression &expression) const override;
 
-	[[nodiscard]] const std::shared_ptr<Expression> &GetChild() const { return child_; }
+	[[nodiscard]] Expression *GetChild() const { return child_; }
 
 	void Calculate(ExpertSystemData &expert_system_data) override;
 
@@ -29,7 +29,7 @@ protected:
 	void UpdateState(State state) override;
 
 private:
-	std::shared_ptr<Expression> child_;
+	Expression *child_;
 	UnaryOperator unary_operator_;
 };
 

@@ -12,38 +12,40 @@
 class ExpertSystemData {
 public:
 	ExpertSystemData();
+	~ExpertSystemData();
 	
 	void AddMainExpression(Expression *expression);
+	void AddExpression(Expression *expression);
 	
 	Expression *Find(Expression *expression) const;
 	
 	std::vector<Expression *> FindAllImpliesExpressions(Expression *expression) const;
 
-	[[nodiscard]] const std::vector<std::shared_ptr<Expression>> &GetMainExpressions() const;
+	[[nodiscard]] const std::vector<Expression *> &GetMainExpressions() const;
 
-	[[nodiscard]] const std::vector<std::shared_ptr<Expression>> &GetFacts() const;
+	[[nodiscard]] const std::vector<Expression *> &GetFacts() const;
 
-	[[nodiscard]] const std::vector<std::shared_ptr<Expression>> &GetQuery() const;
+	[[nodiscard]] const std::vector<Expression *> &GetQuery() const;
 
 private:
-	std::vector<std::shared_ptr<Expression>> main_expressions_;
-	std::vector<std::shared_ptr<Expression>> facts_;
-	std::vector<std::shared_ptr<Expression>> query_;
+	std::vector<Expression *> main_expressions_;
+	std::vector<Expression *> facts_;
+	std::vector<Expression *> query_;
 
-//private:
-//    struct ExpressionHasher {
-//    public:
-//        size_t operator()(const Expression *e) const {
-//            return std::hash<std::string>{}(e->ToString());
-//        }
-//    };
-//
-//    struct ExpressionComparator {
-//    public:
-//        size_t operator()(const Expression *lhs, const Expression *rhs) const {
-//            return lhs->ToString() == rhs->ToString();
-//        }
-//    };
-//
-//	std::unordered_set<Expression *, ExpressionHasher, ExpressionComparator> unique_expressions_;
+private:
+    struct ExpressionHasher {
+    public:
+        size_t operator()(const Expression *e) const {
+            return std::hash<std::string>{}(e->ToString());
+        }
+    };
+
+    struct ExpressionComparator {
+    public:
+        size_t operator()(const Expression *lhs, const Expression *rhs) const {
+            return lhs->ToString() == rhs->ToString();
+        }
+    };
+
+	std::unordered_set<Expression *, ExpressionHasher, ExpressionComparator> unique_expressions_;
 };

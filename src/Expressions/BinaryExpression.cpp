@@ -96,7 +96,6 @@ void BinaryExpression::Calculate(ExpertSystemData &expert_system_data) {
 			else
 				state_from_childs = True;
 			state_ = state_from_childs > state_ ? state_from_childs : state_;
-			//TODO ?????????
 			break;
 		case IMPLIES:
 			state_ = True;

@@ -131,13 +131,13 @@ void Visualizer::ProcessNode(const std::shared_ptr<Node> &parent, const Expressi
 	// TODO ugly construction
 	const auto *ue = dynamic_cast<const UnaryExpression *>(current);
 	if (ue != nullptr) {
-		ProcessNode(current_node, ue->GetChild().get(), pos + ImVec2(150, 0));
+		ProcessNode(current_node, ue->GetChild(), pos + ImVec2(150, 0));
 	}
 
 	const auto *be = dynamic_cast<const BinaryExpression *>(current);
 	if (be != nullptr) {
-		ProcessNode(current_node, be->GetLeftChild().get(), pos + ImVec2(150, -30));
-		ProcessNode(current_node, be->GetRightChild().get(), pos + ImVec2(150, 30));
+		ProcessNode(current_node, be->GetLeftChild(), pos + ImVec2(150, -30));
+		ProcessNode(current_node, be->GetRightChild(), pos + ImVec2(150, 30));
 	}
 }
 
@@ -148,8 +148,8 @@ void Visualizer::UpdateNodesAndLinks(const ExpertSystemData &expert_system_data)
 	expressions_.clear();
 
 	ImVec2 pos(50, 100);
-	for (const auto &expression : expert_system_data.GetMainExpressions()) {
-		ProcessNode(nullptr, expression.get(), pos);
+	for (const auto expression : expert_system_data.GetMainExpressions()) {
+		ProcessNode(nullptr, expression, pos);
 		pos = pos + ImVec2(0, 130);
 	}
 }
@@ -294,7 +294,7 @@ void Visualizer::DrawInputWindow() {
 	ImGui::End();
 }
 
-void Visualizer::CopyExpressionListToBuf(const std::vector<std::shared_ptr<Expression>> &expressions) {
+void Visualizer::CopyExpressionListToBuf(const std::vector<Expression *> &expressions) {
 	bzero(buf, IM_ARRAYSIZE(buf));
 	size_t i = 0;
 	for (const auto exp : expressions) {
@@ -315,8 +315,8 @@ void Visualizer::DrawFactsWindow(const ExpertSystemData &data) {
 
 	ImGui::Begin("Facts");
 	for (char f = 'A'; f <= 'Z'; ++f) {
-		auto it = std::find_if(data.GetFacts().begin(), data.GetFacts().end(), [f](const std::shared_ptr<Expression> &e) {
-			auto fe = dynamic_cast<FactExpression *>(e.get());
+		auto it = std::find_if(data.GetFacts().begin(), data.GetFacts().end(), [f](Expression *e) {
+			auto fe = dynamic_cast<FactExpression *>(e);
 			return fe != nullptr && fe->GetFact() == f;
 		});
 		ImGui::Text("%c", f);
