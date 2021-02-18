@@ -128,22 +128,17 @@ void BinaryExpression::UpdateState(Expression::State state) {
 			}
 			break;
 		case XOR:
-//			if (left_child_->GetState())
-		
-//			bool equals = left_child_->GetState() != Undetermined && left_child_->GetState() == right_child_->GetState();
-//			if (state == Undetermined) {
-//
-//				if (!equals) {
-//					left_child_->UpdateState(True);
-//					right_child_->UpdateState(True);
-//				}
-//			} else if (state == True) {
-//				if (equals) {
-//
-//				}
-//			}
+			if (state_ == True && left_child_->GetState() == True && right_child_->GetState() == True)
+				throw std::runtime_error("logic contradiction");
+			if (state_ == True && (left_child_->GetState() == True || right_child_->GetState() == True))
+				return;
+			if (state_ == False && left_child_->GetState() == right_child_->GetState())
+				return;
+			left_child_->UpdateState(Undetermined);
+			right_child_->UpdateState(Undetermined);
 			break;
 		case IMPLIES:
+			throw std::logic_error("Must be not reachable");
 		case MUTUAL_IMPLIES:
 			throw std::logic_error("Must be not reachable");
 	}
