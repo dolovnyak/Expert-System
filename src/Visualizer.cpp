@@ -41,30 +41,17 @@ void Visualizer::SetupImGui()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
-	//ImGui::StyleColorsClassic();
 
 	ImGui_ImplGlfw_InitForOpenGL(window_, true);
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
-	// Load Fonts
-	// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-	// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-	// - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-	// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-	// - Read 'docs/FONTS.md' for more instructions and details.
-	// - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-	//io.Fonts->AddFontDefault();
-	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/ProggyTiny.ttf", 10.0f);
-	//ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-	//IM_ASSERT(font != NULL);
+//	io.Fonts->AddFontDefault();
+//	io.Fonts->AddFontFromFileTTF("libs/imgui/imgui-github/misc/fonts/Roboto-Medium.ttf", 15.0f);
+//	io.Fonts->AddFontFromFileTTF("libs/imgui/imgui-github/misc/fonts/Cousine-Regular.ttf", 15.0f);
+	io.Fonts->AddFontFromFileTTF("libs/imgui/imgui-github/misc/fonts/DroidSans.ttf", 15.0f);
+//	io.Fonts->AddFontFromFileTTF("libs/imgui/imgui-github/misc/fonts/ProggyTiny.ttf", 16.0f);
 }
 
 void Visualizer::Show(const ExpertSystemData &expert_system_data)
@@ -133,7 +120,7 @@ void Visualizer::ProcessNode(const std::shared_ptr<Node> &parent, const Expressi
 		return;
 	}
 
-	std::shared_ptr<Node> current_node = std::make_shared<Node>(local_id++, current->ToString(), pos, 1, 1);
+	std::shared_ptr<Node> current_node = std::make_shared<Node>(local_id++, current->ToString(), current->GetState(), pos, 1, 1);
 	nodes.push_back(current_node);
 	expressions_.insert({str, current_node});
 
@@ -149,8 +136,8 @@ void Visualizer::ProcessNode(const std::shared_ptr<Node> &parent, const Expressi
 
 	const auto *be = dynamic_cast<const BinaryExpression *>(current);
 	if (be != nullptr) {
-		ProcessNode(current_node, be->GetLeftChild(), pos + ImVec2(150, -25));
-		ProcessNode(current_node, be->GetRightChild(), pos + ImVec2(150, 25));
+		ProcessNode(current_node, be->GetLeftChild(), pos + ImVec2(150, -30));
+		ProcessNode(current_node, be->GetRightChild(), pos + ImVec2(150, 30));
 	}
 }
 
@@ -163,7 +150,7 @@ void Visualizer::UpdateNodesAndLinks(const ExpertSystemData &expert_system_data)
 	ImVec2 pos(50, 50);
 	for (const auto expression : expert_system_data.GetMainExpressions()) {
 		ProcessNode(nullptr, expression, pos);
-		pos = pos + ImVec2(0, 100);
+		pos = pos + ImVec2(0, 130);
 	}
 }
 
@@ -174,7 +161,7 @@ static inline ImVec4 GetColor(Expression::State state) {
 		case Expression::Undetermined:
 			return { 0.66f, 0.66f, 0.66f, 1 };
 		case Expression::True:
-			return { 0, 0, 1, 1 };
+			return { 0, 1, 0, 1 };
 	}
 }
 
@@ -185,19 +172,30 @@ void Visualizer::DrawGraphWindow() {
 	ImGui::Begin("Graph");
 	ImGuiIO& io = ImGui::GetIO();
 	ImGui::BeginGroup();
+	
+	//display canvas
 	const float NODE_SLOT_RADIUS = 4.0f;
 	const ImVec2 NODE_WINDOW_PADDING(8.0f, 8.0f);
-	// Create our child canvas
-//	ImGui::Text("Hold middle mouse button to scroll (%.2f,%.2f)", scrolling.x, scrolling.y);
+	ImGui::Text("Hold middle mouse button to move");
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(1, 1));
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 	ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(60, 60, 70, 200));
-	ImGui::BeginChild("scrolling_region", ImVec2(0, 0), true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove);
+	ImGui::BeginChild("scrolling_region", ImVec2(0, 0), true, ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove);
 	ImGui::PopStyleVar(); // WindowPadding
 	ImGui::PushItemWidth(120.0f);
-
+	
 	const ImVec2 offset = ImGui::GetCursorScreenPos() + scrolling;
 	ImDrawList* draw_list = ImGui::GetWindowDrawList();
+	
+	// Display grid
+	ImU32 GRID_COLOR = IM_COL32(200, 200, 200, 40);
+	float GRID_SZ = 64.0f;
+	ImVec2 win_pos = ImGui::GetCursorScreenPos();
+	ImVec2 canvas_sz = ImGui::GetWindowSize();
+	for (float x = fmodf(scrolling.x, GRID_SZ); x < canvas_sz.x; x += GRID_SZ)
+		draw_list->AddLine(ImVec2(x, 0.0f) + win_pos, ImVec2(x, canvas_sz.y) + win_pos, GRID_COLOR);
+	for (float y = fmodf(scrolling.y, GRID_SZ); y < canvas_sz.y; y += GRID_SZ)
+		draw_list->AddLine(ImVec2(0.0f, y) + win_pos, ImVec2(canvas_sz.x, y) + win_pos, GRID_COLOR);
 
 	// Display links
 	draw_list->ChannelsSplit(2);
@@ -236,11 +234,7 @@ void Visualizer::DrawGraphWindow() {
 		draw_list->ChannelsSetCurrent(0); // Background
 		ImGui::SetCursorScreenPos(node_rect_min);
 		ImGui::InvisibleButton("node", node->Size);
-//		if (ImGui::IsItemHovered())
-//		{
-//			node_hovered_in_scene = node->ID;
-//			open_context_menu |= ImGui::IsMouseClicked(1);
-//		}
+		
 		bool node_moving_active = ImGui::IsItemActive();
 		if (node_widgets_active || node_moving_active)
 			node_selected = node->ID;
@@ -262,7 +256,7 @@ void Visualizer::DrawGraphWindow() {
 	// Scrolling
 	if (ImGui::IsWindowHovered() && !ImGui::IsAnyItemActive() && ImGui::IsMouseDragging(ImGuiMouseButton_Middle, 0.0f))
 		scrolling = scrolling + io.MouseDelta;
-
+	
 	ImGui::PopItemWidth();
 	ImGui::EndChild();
 	ImGui::PopStyleColor();

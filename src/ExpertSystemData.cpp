@@ -4,9 +4,16 @@
 
 Expression *ExpertSystemData::Find(Expression *expression) const {
 	for (Expression *item : main_expressions_) {
-		auto find_result = item->Find(expression);
+		Expression *find_result = item->Find(expression);
 		if (find_result != nullptr)
 			return find_result;
+	}
+	if (expression->GetType() == ExpressionType::FACT) {
+		for (Expression *fact_expression : facts_) {
+			if (*fact_expression == *expression)
+				return fact_expression;
+		}
+		throw std::logic_error("there is no fact '" + expression->ToString() + "' in ExpertSystemData.facts_");
 	}
 	return nullptr;
 }
@@ -52,7 +59,15 @@ std::vector<Expression *> ExpertSystemData::FindAllImpliesExpressions(Expression
 	return implies_expressions;
 }
 
+ExpertSystemData::ExpertSystemData()
+{
+	for (int i = 'A'; i <= 'Z'; i++) {
+		facts_.push_back(new FactExpression(static_cast<char>(i)));
+	}
+}
+
 ExpertSystemData::~ExpertSystemData()
 {
 	//TODO clear all data
 }
+

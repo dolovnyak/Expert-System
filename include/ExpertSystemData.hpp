@@ -9,6 +9,7 @@
 
 class ExpertSystemData {
 public:
+	ExpertSystemData();
 	~ExpertSystemData();
 	
 	void AddMainExpression(Expression *expression);

@@ -13,10 +13,22 @@ std::string Expression::GetStateName(Expression::State state) {
 		case False:
 			return "false";
 		case Undetermined:
-			return "???";
+			return "undetermined";
 		case True:
 			return "true";
 	}
+}
+
+Expression::State Expression::GetMinState(Expression::State first, Expression::State second) {
+	if (first < second)
+		return first;
+	return second;
+}
+
+Expression::State Expression::GetMaxState(Expression::State first, Expression::State second) {
+	if (first > second)
+		return first;
+	return second;
 }
 
 void Expression::UpdateState(Expression::State state) {

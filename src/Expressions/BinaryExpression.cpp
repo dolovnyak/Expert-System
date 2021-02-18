@@ -58,33 +58,30 @@ bool BinaryExpression::operator!=(const Expression& expression) const
 	return !(*this == expression);
 }
 
-Expression::State BinaryExpression::GetStateFromChildren(Expression *left_children, Expression *right_children)
-{
-	switch (binary_operator_) {
-		case AND:
-			if (left_children->GetState() == right_children->GetState())
-				return left_children->GetState();
-		case OR:
-			break;
-		case XOR:
-			break;
-}
-
 void BinaryExpression::Calculate(ExpertSystemData &expert_system_data) {
 	if (is_calculated_)
 		return;
 	is_calculated_ = true;
-
+	
+	std::vector<Expression *> implies_which_contains_expression = expert_system_data.FindAllImpliesExpressions(this);
+	for (Expression *implies_expression : implies_which_contains_expression) {
+		implies_expression->Calculate(expert_system_data);
+	}
 	left_child_->Calculate(expert_system_data);
 	right_child_->Calculate(expert_system_data);
 
 	// TODO implement
 	switch (binary_operator_) {
 		case AND:
-			left_child_->GetState()
+			state_ = Expression::GetMinState(left_child_->GetState(), right_child_->GetState()) > state_ ?
+					Expression::GetMinState(left_child_->GetState(), right_child_->GetState()) : state_;
+			break;
 		case OR:
+			state_ = Expression::GetMaxState(left_child_->GetState(), right_child_->GetState()) > state_ ?
+					 Expression::GetMaxState(left_child_->GetState(), right_child_->GetState()) : state_;
 			break;
 		case XOR:
+			//TODO ?????????
 			break;
 		case IMPLIES:
 			right_child_->UpdateState(left_child_->GetState());

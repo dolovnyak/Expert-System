@@ -43,7 +43,6 @@ private:
 	BinaryOperator binary_operator_;
 	
 	[[nodiscard]] static std::string GetString(BinaryOperator binaryOperator) ;
-	Expression::State BinaryExpression::GetStateFromChildren(Expression *left_children, Expression *right_children);
 };
 
 

@@ -39,10 +39,11 @@ struct Node
 
 	Node(int id,
 	  std::string name,
+	  Expression::State state,
 	  const ImVec2& pos,
 	  int inputs_count,
 	  int outputs_count)
-	  : ID(id), Name(std::move(name)), State(Expression::State::False), Pos(pos), InputsCount(inputs_count), OutputsCount(outputs_count) { }
+	  : ID(id), Name(std::move(name)), State(state), Pos(pos), InputsCount(inputs_count), OutputsCount(outputs_count) { }
 
 	[[nodiscard]] ImVec2 GetInputSlotPos(int slot_no) const {
 		return ImVec2(Pos.x, Pos.y + Size.y * ((float)slot_no + 1) / ((float)InputsCount + 1));

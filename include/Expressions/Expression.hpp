@@ -21,6 +21,8 @@ public:
 	};
 
 	static std::string GetStateName(State state);
+	static Expression::State GetMinState(Expression::State first, Expression::State second);
+	static Expression::State GetMaxState(Expression::State first, Expression::State second);
 
 public:
 	Expression() = default;
