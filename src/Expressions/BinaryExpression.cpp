@@ -44,6 +44,7 @@ bool BinaryExpression::operator==(const Expression& expression) const
 	if (expression.GetType() != ExpressionType::BINARY)
 		return false;
 	
+	//TODO optimize
 	const auto* binaryExpression = dynamic_cast<const BinaryExpression* >(&expression);
 	if (binary_operator_ != binaryExpression->binary_operator_ ||
 		*left_child_ != *binaryExpression->left_child_ ||
