@@ -147,7 +147,7 @@ void Visualizer::UpdateNodesAndLinks(const ExpertSystemData &expert_system_data)
 	links.clear();
 	expressions_.clear();
 
-	ImVec2 pos(50, 50);
+	ImVec2 pos(50, 100);
 	for (const auto expression : expert_system_data.GetMainExpressions()) {
 		ProcessNode(nullptr, expression, pos);
 		pos = pos + ImVec2(0, 130);
