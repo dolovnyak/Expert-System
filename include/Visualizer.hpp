@@ -62,7 +62,7 @@ class Visualizer
 {
 public:
 	void SetupImGui();
-	void Show(const ExpertSystemData &expert_system_data);
+	void Show(std::unique_ptr<ExpertSystemData> &expert_system_data);
 
 private:
 	GLFWwindow* window_ = nullptr;

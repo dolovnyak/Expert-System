@@ -34,8 +34,8 @@ int main(int argc, char **argv)
 	}
 	
 	try {
-		ExpertSystemData data = ExpertSystem::Parse(open_file(argparse.get<std::string>("input_file")));
-		ExpertSystem::Solve(data);
+		std::unique_ptr<ExpertSystemData> data = std::unique_ptr<ExpertSystemData>(ExpertSystem::Parse(open_file(argparse.get<std::string>("input_file"))));
+		ExpertSystem::Solve(*data);
 
 		if (argparse.get<bool>("--visual")) {
 			Visualizer visualizer;

@@ -1,3 +1,5 @@
+#include <stack>
+
 #include "ExpertSystemData.hpp"
 
 Expression *ExpertSystemData::Find(Expression *expression) const {
@@ -21,10 +23,30 @@ void ExpertSystemData::AddMainExpression(Expression *expression) {
 		return;
 
 	main_expressions_.push_back(expression);
-}
 
-void ExpertSystemData::AddExpression(Expression *expression) {
-    unique_expressions_.insert(expression);
+	std::stack<Expression *> stack;
+	stack.push(expression);
+	while (!stack.empty()) {
+	    Expression *cur = stack.top();
+	    stack.pop();
+
+	    unique_expressions_.insert(cur);
+	    switch (cur->GetType()) {
+            case FACT:
+                break;
+            case UNARY: {
+                auto unary = dynamic_cast<UnaryExpression *>(cur);
+                stack.push(unary->GetChild());
+                break;
+            }
+            case BINARY: {
+                auto binary = dynamic_cast<BinaryExpression *>(cur);
+                stack.push(binary->GetLeftChild());
+                stack.push(binary->GetRightChild());
+                break;
+            }
+        }
+	}
 }
 
 const std::vector<Expression *> &ExpertSystemData::GetMainExpressions() const {
@@ -64,13 +86,16 @@ std::vector<Expression *> ExpertSystemData::FindAllImpliesExpressions(Expression
 ExpertSystemData::ExpertSystemData()
 {
 	for (int i = 'A'; i <= 'Z'; i++) {
-		facts_.push_back(new FactExpression(static_cast<char>(i)));
+	    auto fact = new FactExpression(static_cast<char>(i));
+		facts_.push_back(fact);
+		unique_expressions_.insert(fact);
 	}
 }
 
 ExpertSystemData::~ExpertSystemData() {
-    for (auto ue : unique_expressions_) {
-        delete ue;
+    for (Expression *e : unique_expressions_) {
+        delete e;
     }
+    unique_expressions_.clear();
 }
 

@@ -7,22 +7,22 @@
 int yyparse(ExpertSystemData *data);
 extern FILE *yyin;
 
-ExpertSystemData ExpertSystem::Parse(FILE *file) {
+ExpertSystemData *ExpertSystem::Parse(FILE *file) {
 	yyin = file;
 
-	ExpertSystemData data;
-	yyparse(&data);
+	auto data = new ExpertSystemData();
+	yyparse(data);
 	fclose(file);
 
 	return data;
 }
 
-ExpertSystemData ExpertSystem::Parse(char *str) {
+ExpertSystemData *ExpertSystem::Parse(char *str) {
 	FILE *file = fmemopen(str, strlen(str), "r");
 	
 	yyin = file;
-	ExpertSystemData data;
-	yyparse(&data);
+    auto data = new ExpertSystemData();
+	yyparse(data);
 	fclose(file);
 
 	return data;

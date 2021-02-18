@@ -54,14 +54,12 @@ void Visualizer::SetupImGui()
 //	io.Fonts->AddFontFromFileTTF("libs/imgui/imgui-github/misc/fonts/ProggyTiny.ttf", 16.0f);
 }
 
-void Visualizer::Show(const ExpertSystemData &expert_system_data)
+void Visualizer::Show(std::unique_ptr<ExpertSystemData> &expert_system_data)
 {
-	ExpertSystemData data = expert_system_data;
-
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-	CopyExpressionListToBuf(expert_system_data.GetMainExpressions());
-	UpdateNodesAndLinks(expert_system_data);
+	CopyExpressionListToBuf(expert_system_data->GetMainExpressions());
+	UpdateNodesAndLinks(*expert_system_data);
 
 	while (!glfwWindowShouldClose(window_))
 	{
@@ -73,7 +71,7 @@ void Visualizer::Show(const ExpertSystemData &expert_system_data)
 
 		DrawGraphWindow();
 		DrawInputWindow();
-		DrawFactsWindow(data);
+		DrawFactsWindow(*expert_system_data);
 
 		ImGui::Render();
 		int display_w, display_h;
@@ -88,14 +86,14 @@ void Visualizer::Show(const ExpertSystemData &expert_system_data)
 		if (should_execute_) {
 			error = nullptr;
 			try {
-				data = ExpertSystem::Parse(buf);
-				ExpertSystem::Solve(data);
+                expert_system_data = std::unique_ptr<ExpertSystemData>(ExpertSystem::Parse(buf));
+				ExpertSystem::Solve(*expert_system_data);
 			} catch (const std::exception &exception) {
 				std::unique_ptr<std::string> error_local(new std::string(exception.what()));
 				error = std::move(error_local);
-				data = ExpertSystemData();
+                expert_system_data = std::unique_ptr<ExpertSystemData>(new ExpertSystemData());
 			}
-			UpdateNodesAndLinks(data);
+			UpdateNodesAndLinks(*expert_system_data);
 			should_execute_ = false;
 		}
 	}

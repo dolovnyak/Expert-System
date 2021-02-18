@@ -12,10 +12,9 @@
 class ExpertSystemData {
 public:
 	ExpertSystemData();
-	~ExpertSystemData();
-	
-	void AddMainExpression(Expression *expression);
-	void AddExpression(Expression *expression);
+    ~ExpertSystemData();
+
+    void AddMainExpression(Expression *expression);
 	
 	Expression *Find(Expression *expression) const;
 	
