@@ -58,22 +58,30 @@ static inline Expression::State ApplyNot(Expression::State state) {
 }
 
 void UnaryExpression::Calculate(ExpertSystemData &expert_system_data) {
+	if (is_calculated_)
+		return;
+	is_calculated_ = true;
+	
 	child_->Calculate(expert_system_data);
+	std::vector<Expression *> implies_which_contains_expression = expert_system_data.FindAllImpliesExpressions(this);
+	for (Expression *implies_expression : implies_which_contains_expression) {
+		implies_expression->Calculate(expert_system_data);
+	}
+
+	if (child_->GetState() == True && this->GetState() == True)
+		throw std::runtime_error("logic contradiction");
+		
 	switch (unary_operator_) {
 		case NOT:
 			if (state_ < ApplyNot(child_->GetState())) {
-				Expression::UpdateState(child_->GetState());
-			} else if (child_->GetState() < ApplyNot(state_)) {
-				child_->UpdateState(state_);
-			}
+				state_ = ApplyNot(child_->GetState());
 			break;
 		case PARENTHESES:
 			if (state_ < child_->GetState()) {
-				Expression::UpdateState(child_->GetState());
-			} else if (child_->GetState() < state_) {
-				child_->UpdateState(state_);
+				state_ = child_->GetState();
 			}
 			break;
+		}
 	}
 }
 

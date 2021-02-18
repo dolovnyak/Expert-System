@@ -67,26 +67,44 @@ void BinaryExpression::Calculate(ExpertSystemData &expert_system_data) {
 	for (Expression *implies_expression : implies_which_contains_expression) {
 		implies_expression->Calculate(expert_system_data);
 	}
-	left_child_->Calculate(expert_system_data);
-	right_child_->Calculate(expert_system_data);
 
 	// TODO implement
+	State state_from_childs;
 	switch (binary_operator_) {
 		case AND:
+			left_child_->Calculate(expert_system_data);
+			right_child_->Calculate(expert_system_data);
 			state_ = Expression::GetMinState(left_child_->GetState(), right_child_->GetState()) > state_ ?
 					Expression::GetMinState(left_child_->GetState(), right_child_->GetState()) : state_;
 			break;
 		case OR:
+			left_child_->Calculate(expert_system_data);
+			right_child_->Calculate(expert_system_data);
 			state_ = Expression::GetMaxState(left_child_->GetState(), right_child_->GetState()) > state_ ?
 					 Expression::GetMaxState(left_child_->GetState(), right_child_->GetState()) : state_;
 			break;
 		case XOR:
+			left_child_->Calculate(expert_system_data);
+			right_child_->Calculate(expert_system_data);
+			if (state_ == True && right_child_->GetState() == True && left_child_->GetState() == True)
+				throw std::logic_error("logic contradiction");
+			if (left_child_->GetState() == Undetermined || right_child_->GetState() == Undetermined)
+				state_from_childs = Undetermined;
+			else if ()
+				state_from_childs = left_child_->GetState();
+			state_ = state_from_childs > state_ ? state_from_childs : state_;
 			//TODO ?????????
 			break;
 		case IMPLIES:
+			state_ = True;
+			left_child_->Calculate(expert_system_data);
 			right_child_->UpdateState(left_child_->GetState());
+			right_child_->Calculate(expert_system_data);
 			break;
 		case MUTUAL_IMPLIES:
+			state_ = True;
+			left_child_->Calculate(expert_system_data);
+			right_child_->Calculate(expert_system_data);
 			right_child_->UpdateState(left_child_->GetState());
 			left_child_->UpdateState(right_child_->GetState());
 			break;

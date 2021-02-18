@@ -36,6 +36,8 @@ public:
 	virtual ExpressionType GetType() const = 0;
 
 	[[nodiscard]] State GetState() const;
+	
+	[[nodiscard]] bool IsCalculated() const;
 
 	virtual bool operator==(const Expression &expression) const = 0;
 

@@ -54,7 +54,7 @@ LINES:
 LINE:
                     | SET_TRUE_FACTS {std::cout << "was inside SET_TRUE_FACTS" << std::endl << std::endl;}
                     | SET_QUESTION_FACTS {std::cout << "was inside SET_QUESTION_FACTS" << std::endl << std::endl;}
-                    | MAIN_EXPRESSION {std::cout << std::endl;}
+                    | MAIN_EXPRESSION
 
 SEPARATORS:
                     ES_SEPARATOR
@@ -65,13 +65,11 @@ MAIN_EXPRESSION:
                     {
                         Expression *main_expression(new BinaryExpression($1, BinaryOperator::IMPLIES, $3));
                         expert_system_data->AddMainExpression(main_expression);
-                        std::cout << *main_expression << std::endl;
                     }
                     | EXPRESSION ES_MUTUAL_IMPLIES EXPRESSION
                     {
                         Expression *main_expression(new BinaryExpression($1, BinaryOperator::MUTUAL_IMPLIES, $3));
                         expert_system_data->AddMainExpression(main_expression);
-                        std::cout << *main_expression << std::endl;
                     }
 
 EXPRESSION:
@@ -80,7 +78,6 @@ EXPRESSION:
                         Expression *expression(new FactExpression($1));
                         $$ = expert_system_data->Find(expression);
                         delete expression;
-                        std::cout << *$$ << std::endl; //TODO del
                     }
                     | ES_NOT EXPRESSION
                     {
@@ -92,7 +89,6 @@ EXPRESSION:
                         }
                         else
                             $$ = expression;
-                        std::cout << *$$ << std::endl; //TODO del
                     }
                     | EXPRESSION ES_OR EXPRESSION
                     {
@@ -104,7 +100,6 @@ EXPRESSION:
                         }
                         else
                             $$ = expression;
-                        std::cout << *$$ << std::endl; //TODO del
                     }
                     | EXPRESSION ES_XOR EXPRESSION
                     {
@@ -116,7 +111,6 @@ EXPRESSION:
                         }
                         else
                             $$ = expression;
-                       std::cout << *$$ << std::endl; //TODO del
                     }
                     | EXPRESSION ES_AND EXPRESSION
                     {
@@ -128,7 +122,6 @@ EXPRESSION:
                         }
                         else
                             $$ = expression;
-                        std::cout << *$$ << std::endl; //TODO del
                     }
                     | ES_OPEN_BRACKET EXPRESSION ES_CLOSE_BRACKET
                     {
@@ -140,7 +133,6 @@ EXPRESSION:
                         }
                         else
                             $$ = expression;
-                        std::cout << *$$ << std::endl; //TODO del
                     }
 
 SET_TRUE_FACTS:
