@@ -123,9 +123,3 @@ void ExpertSystemData::FillQueriesFromOld(const ExpertSystemData::ExpressionsSet
 		AddQueryExpression(this->Find(new FactExpression(dynamic_cast<const FactExpression *>(old_query)->GetFact())));
 	}
 }
-
-void ExpertSystemData::ChangeAllMainExpressionOnMutualImplies() {
-	for (Expression *expression : main_expressions_) {
-		dynamic_cast<BinaryExpression *>(expression)->UpdateBinaryOperator(BinaryOperator::MUTUAL_IMPLIES);
-	}
-}

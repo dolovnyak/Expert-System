@@ -40,9 +40,6 @@ char FactExpression::GetFact() const {
 
 void FactExpression::Calculate(ExpertSystemData &expert_system_data)
 {
-	if (is_calculated_)
-		return;
-	
 	std::vector<Expression *> implies_which_contains_expression = expert_system_data.FindAllImpliesExpressions(this);
 	for (Expression *implies_expression : implies_which_contains_expression) {
 		implies_expression->Calculate(expert_system_data);

@@ -44,8 +44,6 @@ public:
 
 	std::vector<Expression *> FindAllImpliesExpressions(Expression *expression) const;
 	
-	void ChangeAllMainExpressionOnMutualImplies();
-
 	[[nodiscard]] const ExpressionsSet &GetMainExpressions() const;
 
 	[[nodiscard]] const ExpressionsSet &GetFacts() const;

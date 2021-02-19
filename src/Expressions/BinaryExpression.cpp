@@ -3,11 +3,9 @@
 
 BinaryExpression::BinaryExpression(Expression* left, BinaryOperator binary_operator, Expression* right)
 		: left_child_(left), binary_operator_(binary_operator), right_child_(right)
-{
-}
+{}
 
-Expression* BinaryExpression::Find(Expression* expression)
-{
+Expression* BinaryExpression::Find(Expression* expression) {
 	if (*this == *expression)
 		return this;
 
@@ -17,10 +15,8 @@ Expression* BinaryExpression::Find(Expression* expression)
 	return right_child_->Find(expression);
 }
 
-std::string BinaryExpression::GetString(BinaryOperator binary_operator)
-{
-	switch (binary_operator)
-	{
+std::string BinaryExpression::GetString(BinaryOperator binary_operator) {
+	switch (binary_operator) {
 		case BinaryOperator::AND: return "+";
 		case BinaryOperator::OR: return "|";
 		case BinaryOperator::XOR: return "^";
@@ -29,13 +25,11 @@ std::string BinaryExpression::GetString(BinaryOperator binary_operator)
 	}
 }
 
-std::string BinaryExpression::ToString() const
-{
+std::string BinaryExpression::ToString() const {
 	return left_child_->ToString() + GetString(binary_operator_) + right_child_->ToString();
 }
 
-ExpressionType BinaryExpression::GetType() const
-{
+ExpressionType BinaryExpression::GetType() const {
 	return ExpressionType::BINARY;
 }
 
@@ -107,6 +101,7 @@ void BinaryExpression::Calculate(ExpertSystemData &expert_system_data) {
 			right_child_->Calculate(expert_system_data);
 			right_child_->UpdateState(left_child_->GetState());
 			left_child_->UpdateState(right_child_->GetState());
+			right_child_->UpdateState(left_child_->GetState());
 			break;
 	}
 }
@@ -149,5 +144,3 @@ BinaryOperator BinaryExpression::GetBinaryOperator() const {
 void BinaryExpression::UpdateBinaryOperator(BinaryOperator binary_operator) {
 	binary_operator_ = binary_operator;
 }
-
-
