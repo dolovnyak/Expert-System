@@ -53,8 +53,8 @@ LINES:
                     | LINE SEPARATORS LINES
 
 LINE:
-                    | SET_TRUE_FACTS {std::cout << "was inside SET_TRUE_FACTS" << std::endl << std::endl;}
-                    | SET_QUESTION_FACTS {std::cout << "was inside SET_QUESTION_FACTS" << std::endl << std::endl;}
+                    | SET_TRUE_FACTS
+                    | SET_QUESTION_FACTS
                     | MAIN_EXPRESSION
 
 SEPARATORS:
@@ -107,13 +107,11 @@ TRUE_FACTS:
                     ES_FACT TRUE_FACTS
                     {
                         expert_system_data->Find(new FactExpression($1))->UpdateState(Expression::State::True);
-                        std::cout << "SET TRUE FACT " << $1 << std::endl;
                     }
                     | ES_FACT
                     {
                         expert_system_data->Find(new FactExpression($1))->UpdateState(Expression::State::True);
                         $$ = $1;
-                        std::cout << "SET TURE FACT " << $1 << std::endl;
                     }
 
 SET_QUESTION_FACTS:
@@ -124,13 +122,11 @@ QUESTION_FACTS:
                     ES_FACT QUESTION_FACTS
                     {
                         expert_system_data->AddQueryExpression(expert_system_data->Find(new FactExpression($1)));
-                        std::cout << "SET QUESTION FACT " << $1 << std::endl;
                     }
                     | ES_FACT
                     {
                         expert_system_data->AddQueryExpression(expert_system_data->Find(new FactExpression($1)));
                         $$ = $1;
-                        std::cout << "SET QUESTION FACT " << $1 << std::endl;
                     }
 
 %%

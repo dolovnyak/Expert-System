@@ -30,6 +30,5 @@
 
 int yywrap (void)
 {
-    std::cout << "finish input" << std::endl;
     return 1;
 }
