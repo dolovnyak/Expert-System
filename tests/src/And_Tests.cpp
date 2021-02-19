@@ -2,7 +2,7 @@
 
 #include "ExpertSystem.hpp"
 
-class AndTests : public ::testing::Test {
+class And_Tests : public ::testing::Test {
 public:
 	const std::string Test1_Input = "B => A\n"
 								   "D + E => B\n"
@@ -36,13 +36,13 @@ public:
 	}
 };
 
-TEST_F(AndTests, Test_DEIJOP) {
+TEST_F(And_Tests, Test_DEIJOP) {
 	auto *esd = Solve(Test1_Input, Test_DEIJOP);
 	Check(esd, {'A', 'F', 'K', 'P'}, Expression::True);
 	delete esd;
 }
 
-TEST_F(AndTests, Test_DEIJP) {
+TEST_F(And_Tests, Test_DEIJP) {
 	auto *esd = Solve(Test1_Input, Test_DEIJP);
 	Check(esd, {'A', 'F', 'P'}, Expression::True);
 	Check(esd, {'K'}, Expression::False);

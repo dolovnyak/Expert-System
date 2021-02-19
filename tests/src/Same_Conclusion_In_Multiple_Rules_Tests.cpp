@@ -2,9 +2,10 @@
 
 #include "ExpertSystem.hpp"
 
-class NotTests : public ::testing::Test {
+class Same_Conclusion_In_Multiple_Rules_Tests : public ::testing::Test {
 public:
-	const std::string Test1_Input = "B + !C => A\n"
+	const std::string Test1_Input = "B => A\n"
+									"C => A\n"
 									"?A\n";
 
 	const std::string Test_Empty = "=\n";
@@ -31,26 +32,26 @@ public:
 	}
 };
 
-TEST_F(NotTests, Test_Empty) {
+TEST_F(Same_Conclusion_In_Multiple_Rules_Tests, Test_Empty) {
 	auto *esd = Solve(Test1_Input, Test_Empty);
 	Check(esd, {'A'}, Expression::False);
 	delete esd;
 }
 
-TEST_F(NotTests, Test_B) {
+TEST_F(Same_Conclusion_In_Multiple_Rules_Tests, Test_B) {
 	auto *esd = Solve(Test1_Input, Test_B);
 	Check(esd, {'A'}, Expression::True);
 	delete esd;
 }
 
-TEST_F(NotTests, Test_C) {
+TEST_F(Same_Conclusion_In_Multiple_Rules_Tests, Test_C) {
 	auto *esd = Solve(Test1_Input, Test_C);
-	Check(esd, {'A'}, Expression::False);
+	Check(esd, {'A'}, Expression::True);
 	delete esd;
 }
 
-TEST_F(NotTests, Test_BC) {
+TEST_F(Same_Conclusion_In_Multiple_Rules_Tests, Test_BC) {
 	auto *esd = Solve(Test1_Input, Test_BC);
-	Check(esd, {'A'}, Expression::False);
+	Check(esd, {'A'}, Expression::True);
 	delete esd;
 }

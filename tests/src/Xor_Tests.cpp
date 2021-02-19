@@ -2,16 +2,17 @@
 
 #include "ExpertSystem.hpp"
 
-class SameConclusionInMultipleRulesTests : public ::testing::Test {
+class Xor_Tests : public ::testing::Test {
 public:
-	const std::string Test1_Input = "B => A\n"
-									"C => A\n"
+	const std::string Test1_Input = "B + C => A\n"
+									"D ^ E => B\n"
+									"B => C\n"
 									"?A\n";
 
 	const std::string Test_Empty = "=\n";
-	const std::string Test_B = "=B\n";
-	const std::string Test_C = "=C\n";
-	const std::string Test_BC = "=BC\n";
+	const std::string Test_D = "=D\n";
+	const std::string Test_E = "=E\n";
+	const std::string Test_DE = "=DE\n";
 
 public:
 	static ExpertSystemData *Solve(const std::string &input, const std::string &init_facts) {
@@ -32,26 +33,26 @@ public:
 	}
 };
 
-TEST_F(SameConclusionInMultipleRulesTests, Test_Empty) {
+TEST_F(Xor_Tests, Test_Empty) {
 	auto *esd = Solve(Test1_Input, Test_Empty);
 	Check(esd, {'A'}, Expression::False);
 	delete esd;
 }
 
-TEST_F(SameConclusionInMultipleRulesTests, Test_B) {
-	auto *esd = Solve(Test1_Input, Test_B);
+TEST_F(Xor_Tests, Test_D) {
+	auto *esd = Solve(Test1_Input, Test_D);
 	Check(esd, {'A'}, Expression::True);
 	delete esd;
 }
 
-TEST_F(SameConclusionInMultipleRulesTests, Test_C) {
-	auto *esd = Solve(Test1_Input, Test_C);
+TEST_F(Xor_Tests, Test_E) {
+	auto *esd = Solve(Test1_Input, Test_E);
 	Check(esd, {'A'}, Expression::True);
 	delete esd;
 }
 
-TEST_F(SameConclusionInMultipleRulesTests, Test_BC) {
-	auto *esd = Solve(Test1_Input, Test_BC);
-	Check(esd, {'A'}, Expression::True);
+TEST_F(Xor_Tests, Test_DE) {
+	auto *esd = Solve(Test1_Input, Test_DE);
+	Check(esd, {'A'}, Expression::False);
 	delete esd;
 }

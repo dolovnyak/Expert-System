@@ -2,7 +2,7 @@
 
 #include "ExpertSystem.hpp"
 
-class OrTests : public ::testing::Test {
+class Or_Tests : public ::testing::Test {
 public:
 	const std::string Test1_Input = "B + C => A\n"
 									"D | E => B\n"
@@ -33,25 +33,25 @@ public:
 	}
 };
 
-TEST_F(OrTests, Test_Empty) {
+TEST_F(Or_Tests, Test_Empty) {
 	auto *esd = Solve(Test1_Input, Test_Empty);
 	Check(esd, {'A'}, Expression::False);
 	delete esd;
 }
 
-TEST_F(OrTests, Test_D) {
+TEST_F(Or_Tests, Test_D) {
 	auto *esd = Solve(Test1_Input, Test_D);
 	Check(esd, {'A'}, Expression::True);
 	delete esd;
 }
 
-TEST_F(OrTests, Test_E) {
+TEST_F(Or_Tests, Test_E) {
 	auto *esd = Solve(Test1_Input, Test_E);
 	Check(esd, {'A'}, Expression::True);
 	delete esd;
 }
 
-TEST_F(OrTests, Test_DE) {
+TEST_F(Or_Tests, Test_DE) {
 	auto *esd = Solve(Test1_Input, Test_DE);
 	Check(esd, {'A'}, Expression::True);
 	delete esd;
