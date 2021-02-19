@@ -1,8 +1,6 @@
-// TODO remove
 #include <iostream>
 
 #include <memory>
-//#include <imgui_internal.h>
 
 #include "Visualizer.hpp"
 #include "ExpertSystemData.hpp"
@@ -47,11 +45,7 @@ void Visualizer::SetupImGui()
 	ImGui_ImplGlfw_InitForOpenGL(window_, true);
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
-//	io.Fonts->AddFontDefault();
-//	io.Fonts->AddFontFromFileTTF("libs/imgui/imgui-github/misc/fonts/Roboto-Medium.ttf", 15.0f);
-//	io.Fonts->AddFontFromFileTTF("libs/imgui/imgui-github/misc/fonts/Cousine-Regular.ttf", 15.0f);
 	io.Fonts->AddFontFromFileTTF("libs/imgui/imgui-github/misc/fonts/DroidSans.ttf", 15.0f);
-//	io.Fonts->AddFontFromFileTTF("libs/imgui/imgui-github/misc/fonts/ProggyTiny.ttf", 16.0f);
 }
 
 void Visualizer::Show(std::unique_ptr<ExpertSystemData> &expert_system_data)
@@ -98,7 +92,6 @@ void Visualizer::Show(std::unique_ptr<ExpertSystemData> &expert_system_data)
 		}
 	}
 
-	// Cleanup
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();

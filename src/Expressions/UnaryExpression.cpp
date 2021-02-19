@@ -2,8 +2,8 @@
 #include "ExpertSystem.hpp"
 #include "ExpertSystemData.hpp"
 
-UnaryExpression::UnaryExpression(UnaryOperator unaryOperator, Expression* child)
-		: unary_operator_(unaryOperator), child_(child) {}
+UnaryExpression::UnaryExpression(UnaryOperator unary_operator, Expression* child)
+		: unary_operator_(unary_operator), child_(child) {}
 
 Expression* UnaryExpression::Find(Expression* expression)
 {
@@ -68,11 +68,10 @@ void UnaryExpression::Calculate(ExpertSystemData &expert_system_data) {
 		implies_expression->Calculate(expert_system_data);
 	}
 
-	if (child_->GetState() == True && this->GetState() == True)
-		throw std::runtime_error("logic contradiction");
-		
 	switch (unary_operator_) {
 		case NOT:
+			if (child_->GetState() == True && this->GetState() == True)
+				throw Expression::LogicContradictionException(this->ToString());
 			if (state_ < ApplyNot(child_->GetState())) {
 				state_ = ApplyNot(child_->GetState());
 			break;
@@ -92,7 +91,7 @@ void UnaryExpression::UpdateState(Expression::State state) {
 	switch (unary_operator_) {
 		case NOT:
 			if (state_ == True && child_->GetState() == True)
-				throw std::runtime_error("logic contradiction");
+				throw Expression::LogicContradictionException(this->ToString());
 			child_new_state = ApplyNot(state);
 			break;
 		case PARENTHESES:

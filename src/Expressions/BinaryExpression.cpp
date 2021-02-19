@@ -1,8 +1,8 @@
 #include "Expressions/BinaryExpression.hpp"
 #include "ExpertSystemData.hpp"
 
-BinaryExpression::BinaryExpression(Expression* left, BinaryOperator binaryOperator, Expression* right)
-		: left_child_(left), binary_operator_(binaryOperator), right_child_(right)
+BinaryExpression::BinaryExpression(Expression* left, BinaryOperator binary_operator, Expression* right)
+		: left_child_(left), binary_operator_(binary_operator), right_child_(right)
 {
 }
 
@@ -17,9 +17,9 @@ Expression* BinaryExpression::Find(Expression* expression)
 	return right_child_->Find(expression);
 }
 
-std::string BinaryExpression::GetString(BinaryOperator binaryOperator)
+std::string BinaryExpression::GetString(BinaryOperator binary_operator)
 {
-	switch (binaryOperator)
+	switch (binary_operator)
 	{
 		case BinaryOperator::AND: return "+";
 		case BinaryOperator::OR: return "|";
@@ -44,7 +44,6 @@ bool BinaryExpression::operator==(const Expression& expression) const
 	if (expression.GetType() != ExpressionType::BINARY)
 		return false;
 	
-	//TODO optimize
 	const auto* binaryExpression = dynamic_cast<const BinaryExpression* >(&expression);
 	if (binary_operator_ != binaryExpression->binary_operator_ ||
 		*left_child_ != *binaryExpression->left_child_ ||
@@ -69,33 +68,32 @@ void BinaryExpression::Calculate(ExpertSystemData &expert_system_data) {
 		implies_expression->Calculate(expert_system_data);
 	}
 
-	// TODO implement
-	State state_from_childs;
+	State state_from_children;
 	switch (binary_operator_) {
 		case AND:
 			left_child_->Calculate(expert_system_data);
 			right_child_->Calculate(expert_system_data);
-			state_from_childs = Expression::GetMinState(left_child_->GetState(), right_child_->GetState());
-			state_ = state_from_childs > state_ ? state_from_childs : state_;
+			state_from_children = Expression::GetMinState(left_child_->GetState(), right_child_->GetState());
+			state_ = state_from_children > state_ ? state_from_children : state_;
 			break;
 		case OR:
 			left_child_->Calculate(expert_system_data);
 			right_child_->Calculate(expert_system_data);
-			state_from_childs = Expression::GetMaxState(left_child_->GetState(), right_child_->GetState());
-			state_ = state_from_childs > state_ ? state_from_childs : state_;
+			state_from_children = Expression::GetMaxState(left_child_->GetState(), right_child_->GetState());
+			state_ = state_from_children > state_ ? state_from_children : state_;
 			break;
 		case XOR:
 			left_child_->Calculate(expert_system_data);
 			right_child_->Calculate(expert_system_data);
 			if (state_ == True && right_child_->GetState() == True && left_child_->GetState() == True)
-				throw std::runtime_error("logic contradiction");
+				throw Expression::LogicContradictionException(this->ToString());
 			if (left_child_->GetState() == Undetermined || right_child_->GetState() == Undetermined)
-				state_from_childs = Undetermined;
+				state_from_children = Undetermined;
 			else if (left_child_->GetState() == right_child_->GetState())
-				state_from_childs = False;
+				state_from_children = False;
 			else
-				state_from_childs = True;
-			state_ = state_from_childs > state_ ? state_from_childs : state_;
+				state_from_children = True;
+			state_ = state_from_children > state_ ? state_from_children : state_;
 			break;
 		case IMPLIES:
 			state_ = True;
@@ -114,29 +112,29 @@ void BinaryExpression::Calculate(ExpertSystemData &expert_system_data) {
 }
 
 void BinaryExpression::UpdateState(Expression::State state) {
+
 	this->Expression::UpdateState(state);
 
 	switch (binary_operator_) {
 		case AND:
 			left_child_->UpdateState(state);
 			right_child_->UpdateState(state);
-			break;
+			return;
 		case OR:
 			if (left_child_->GetState() < state && right_child_->GetState() < state) {
 				left_child_->UpdateState(Undetermined);
 				right_child_->UpdateState(Undetermined);
 			}
-			break;
+			return;
 		case XOR:
 			if (state_ == True && left_child_->GetState() == True && right_child_->GetState() == True)
-				throw std::runtime_error("logic contradiction");
-			if (state_ == True && (left_child_->GetState() == True || right_child_->GetState() == True))
-				return;
-			if (state_ == False && left_child_->GetState() == right_child_->GetState())
+				throw Expression::LogicContradictionException(this->ToString());
+			if ((state_ == True && (left_child_->GetState() == True || right_child_->GetState() == True)) ||
+				(state_ == False && left_child_->GetState() == right_child_->GetState()))
 				return;
 			left_child_->UpdateState(Undetermined);
 			right_child_->UpdateState(Undetermined);
-			break;
+			return;
 		case IMPLIES:
 			throw std::logic_error("Must be not reachable");
 		case MUTUAL_IMPLIES:
@@ -146,6 +144,10 @@ void BinaryExpression::UpdateState(Expression::State state) {
 
 BinaryOperator BinaryExpression::GetBinaryOperator() const {
 	return binary_operator_;
+}
+
+void BinaryExpression::UpdateBinaryOperator(BinaryOperator binary_operator) {
+	binary_operator_ = binary_operator;
 }
 
 

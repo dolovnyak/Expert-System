@@ -27,17 +27,24 @@ private:
 	
 public:
 	using ExpressionsSet = std::unordered_set<Expression *, ExpressionHasher, ExpressionComparator>;
-	
-	ExpertSystemData();
-    ~ExpertSystemData();
 
-    void AddMainExpression(Expression *expression);
-    
+	ExpertSystemData();
+
+	ExpertSystemData(const ExpertSystemData &expert_system_data);
+
+	ExpertSystemData &operator=(const ExpertSystemData &expert_system_data);
+
+	~ExpertSystemData();
+
+	void AddMainExpression(Expression *expression);
+
 	void AddQueryExpression(Expression *expression);
-	
+
 	Expression *Find(Expression *expression);
-	
+
 	std::vector<Expression *> FindAllImpliesExpressions(Expression *expression) const;
+	
+	void ChangeAllMainExpressionOnMutualImplies();
 
 	[[nodiscard]] const ExpressionsSet &GetMainExpressions() const;
 
@@ -49,6 +56,11 @@ private:
 	ExpressionsSet main_expressions_;
 	ExpressionsSet facts_;
 	ExpressionsSet queries_;
-	
+
 	ExpressionsSet unique_expressions_;
+	
+	void FillDefaultFacts();
+	Expression *CreateExpressionFromOldWithUsingUnique(const Expression *old_expression);
+	void FillQueriesFromOld(const ExpressionsSet &old_queries_set);
+	void FillMainExpressionsFromOld(const ExpressionsSet &old_main_expression_set);
 };

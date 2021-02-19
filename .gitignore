@@ -8,3 +8,5 @@ test_lex_yacc
 *.yy.hpp
 *.DS_Store
 expert_system
+*.dsym
+*imgui.ini

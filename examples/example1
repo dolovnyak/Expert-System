@@ -2,6 +2,8 @@
 # all the required rules and symbols, along with the bonus ones, will be
 # shown here. spacing is not important
 
+#A => !A
+
 B=>A
 D + E => B
 G + H => F
@@ -10,6 +12,7 @@ G => H
 L + M => K
 O + P => L + N
 N => M
+K => M
 
 
 #C => E              # C implies E
@@ -38,7 +41,7 @@ N => M
 #A + B <=> C         # A and B if and only if C
 #A + B <=> !C        # A and B if and only if not C
 
-=ABG                # Initial facts : A, B and G are true. All others are false.
+#=ABG                # Initial facts : A, B and G are true. All others are false.
                     # If no facts are initially true, then a simple "=" followed
                     # by a newline is used
 

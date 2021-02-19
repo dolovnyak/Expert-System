@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-//#include "ExpertSystemData.hpp"
-
 class ExpertSystemData;
 
 enum ExpressionType {
@@ -43,7 +41,6 @@ public:
 
 	virtual bool operator!=(const Expression &expression) const = 0;
 
-//	virtual void Calculate(ExpertSystemData &expert_system_data, std::vector<Expression *> ) = 0;
 	virtual void Calculate(ExpertSystemData &expert_system_data) = 0;
 
 	virtual void UpdateState(State state);
@@ -51,6 +48,16 @@ public:
 protected:
 	State state_ { False };
 	bool is_calculated_ = false;
+	
+	class LogicContradictionException : public std::exception {
+	public:
+		LogicContradictionException(const std::string &exception);
+		
+		const char* what() const _NOEXCEPT override;
+	
+	private:
+		std::string exception_;
+	};
 };
 
 std::ostream &operator<<(std::ostream &os, const Expression &expression);

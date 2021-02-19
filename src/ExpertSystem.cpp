@@ -32,9 +32,15 @@ void ExpertSystem::Solve(ExpertSystemData &expert_system_data) {
 	for (Expression *fact : expert_system_data.GetFacts()) {
 		fact->Calculate(expert_system_data);
 	}
-}
-
-void ExpertSystem::RaiseEvent(const IEvent &event) {
-	std::time_t now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-	std::cout << std::ctime(&now) << ": " << event.ToString() << std::endl;
+	
+	ExpertSystemData expert_system_data_for_check1(expert_system_data);
+	for (Expression *fact : expert_system_data_for_check1.GetFacts()) {
+		fact->Calculate(expert_system_data_for_check1);
+	}
+	
+	ExpertSystemData expert_system_data_for_check2(expert_system_data);
+	expert_system_data_for_check2.ChangeAllMainExpressionOnMutualImplies();
+	for (Expression *fact : expert_system_data_for_check2.GetFacts()) {
+		fact->Calculate(expert_system_data_for_check2);
+	}
 }

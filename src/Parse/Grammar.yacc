@@ -7,6 +7,7 @@ extern int yylex();
 
 void yyerror(ExpertSystemData *expert_system_data, const char *msg)
 {
+    (void)expert_system_data;
     throw std::runtime_error("YACC EXCEPTION: " + std::string(msg) + ", lookahead token number " + std::to_string(yychar));
 }
 
@@ -63,11 +64,13 @@ SEPARATORS:
 MAIN_EXPRESSION:
                     EXPRESSION ES_IMPLIES EXPRESSION
                     {
-                        expert_system_data->AddMainExpression(new BinaryExpression($1, BinaryOperator::IMPLIES, $3));
+                        expert_system_data->AddMainExpression(
+                            expert_system_data->Find(new BinaryExpression($1, BinaryOperator::IMPLIES, $3)));
                     }
                     | EXPRESSION ES_MUTUAL_IMPLIES EXPRESSION
                     {
-                        expert_system_data->AddMainExpression(new BinaryExpression($1, BinaryOperator::MUTUAL_IMPLIES, $3));
+                        expert_system_data->AddMainExpression(
+                            expert_system_data->Find(new BinaryExpression($1, BinaryOperator::MUTUAL_IMPLIES, $3)));
                     }
 
 EXPRESSION:
