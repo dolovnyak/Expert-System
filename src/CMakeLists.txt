@@ -1,7 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
-
-target_sources(expert_system PUBLIC
-        main.cpp
+target_sources(${EXPERT_SYSTEM_LIB} PUBLIC
         ExpertSystem.cpp
         ExpertSystemData.cpp
         Visualizer.cpp

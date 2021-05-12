@@ -1,6 +1,9 @@
 [submodule "expert-system/libs/glfw"]
 	path = libs/glfw
 	url = https://github.com/glfw/glfw
-[submodule "expert-system/libs/imgui/imgui-github"]
-	path = libs/imgui/imgui-github
+[submodule "libs/googletest"]
+	path = libs/googletest
+	url = https://github.com/google/googletest
+[submodule "libs/imgui"]
+	path = libs/imgui
 	url = https://github.com/ocornut/imgui.git

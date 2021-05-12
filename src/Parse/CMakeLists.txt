@@ -1,6 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
-
-target_sources(expert_system PUBLIC
+target_sources(${EXPERT_SYSTEM_LIB} PUBLIC
         Grammar.yy.cpp
         Lexer.ll.cpp
         )
@@ -24,7 +22,7 @@ add_custom_target(parser_generator ALL
         COMMENT "generate lex/yacc parser"
         VERBATIM
         )
-add_dependencies(${PROJECT_NAME} parser_generator)
+add_dependencies(${EXPERT_SYSTEM_LIB} parser_generator)
 
 # generate lex/yacc parse when reload cmake
 execute_process(COMMAND lex -o ${LEX_CPP_OUTPUT} ${LEX_INPUT})

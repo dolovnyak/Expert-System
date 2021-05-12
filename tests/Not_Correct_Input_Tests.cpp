@@ -25,11 +25,15 @@ public:
 };
 
 TEST_F(Not_Correct_Input_Tests, Not_Correct_Input_Tests_Simple_Nothing_True) {
-	char *str = strdup(GetSimpleInput().c_str());
-	ExpertSystemData *data = ExpertSystem::Parse(str);
-	ExpertSystem::Solve(*data);
-	FactExpression query_expr = FactExpression('A');
-	ASSERT_TRUE((*data->GetQueries().find(&query_expr))->GetState() == Expression::State::True);
+    try {
+        char *str = strdup(GetSimpleInput().c_str());
+        ExpertSystemData *data = ExpertSystem::Parse(str);
+        ExpertSystem::Solve(*data);
+        ASSERT_TRUE(false);
+    }
+    catch (const std::exception& e) {
+        ASSERT_TRUE(contains(e.what(), "Logic contradiction was detected"));
+    }
 }
 
 TEST_F(Not_Correct_Input_Tests, Not_Correct_Input_Tests_Simple_A_True) {
