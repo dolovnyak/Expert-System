@@ -19,7 +19,6 @@ target_include_directories(${EXPERT_SYSTEM_LIB} PUBLIC ${GLFW_INCLUDE_DIRS})
 target_link_libraries(${EXPERT_SYSTEM_LIB} glfw)
 
 #add GLEW to lib
-execute_process(COMMAND brew install glew)
 add_definitions(-DGLEW_STATIC)
 find_package(GLEW REQUIRED)
 target_include_directories(${EXPERT_SYSTEM_LIB} PUBLIC ${GLEW_INCLUDE_DIRS})
