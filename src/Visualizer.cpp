@@ -45,7 +45,7 @@ void Visualizer::SetupImGui()
 	ImGui_ImplGlfw_InitForOpenGL(window_, true);
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
-	io.Fonts->AddFontFromFileTTF("libs/imgui/imgui-github/misc/fonts/DroidSans.ttf", 15.0f);
+	io.Fonts->AddFontFromFileTTF("libs/imgui/misc/fonts/DroidSans.ttf", 15.0f);
 }
 
 void Visualizer::Show(std::unique_ptr<ExpertSystemData> &expert_system_data)

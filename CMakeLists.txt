@@ -36,8 +36,8 @@ target_sources(${EXPERT_SYSTEM_LIB} PUBLIC
         libs/imgui/backends/imgui_impl_opengl3.cpp
         )
 target_include_directories(${EXPERT_SYSTEM_LIB} PUBLIC
-        libs/imgui/imgui-github/
-        libs/imgui/imgui-github/backends
+        libs/imgui
+        libs/imgui/backends
         )
 
 # add project target
