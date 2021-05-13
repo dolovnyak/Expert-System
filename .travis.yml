@@ -1,8 +1,15 @@
 language: cpp
 compiler: clang
 os: osx
+addons:
+  apt:
+    packages:
+      - clang-11
 before_install:
   - pip install --user cpp-coveralls
+install:
+  - export CXX="clang++-11"
+  - export CC="clang-11"
 script:
   - cmake -S . -B build -DCMAKE_CXX_FLAGS="-ftest-coverage -fprofile-arcs" -DINSTALL_DEPS=true
   - make -C build
