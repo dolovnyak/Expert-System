@@ -4,8 +4,8 @@ os: osx
 addons:
   homebrew:
     packages:
-      - glew
-      update: true
+    - glew
+    update: true
 before_install:
   - pip install --user cpp-coveralls
 script:
