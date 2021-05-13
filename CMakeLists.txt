@@ -17,10 +17,29 @@ target_include_directories(${EXPERT_SYSTEM_LIB} PUBLIC ${GLFW_INCLUDE_DIRS})
 target_link_libraries(${EXPERT_SYSTEM_LIB} glfw)
 
 #add GLEW to lib
+if (INSTALL_DEPS)
+    set(GLEW_LIB glew-glew-2.1.0)
+    execute_process(
+            COMMAND curl -O https://codeload.github.com/nigels-com/glew/tar.gz/glew-2.1.0
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/libs)
+    execute_process(
+            COMMAND tar -xzvf glew-2.1.0
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/libs)
+    execute_process(
+            COMMAND rm glew-2.1.0
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/libs)
+    execute_process(
+            COMMAND make -C auto
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/${GLEW_LIB})
+    execute_process(
+            COMMAND make -j4 glew.lib.static
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/${GLEW_LIB})
+endif()
+
 add_definitions(-DGLEW_STATIC)
-find_package(GLEW REQUIRED)
-target_include_directories(${EXPERT_SYSTEM_LIB} PUBLIC ${GLEW_INCLUDE_DIRS})
-target_link_libraries(${EXPERT_SYSTEM_LIB} GLEW::GLEW)
+target_link_libraries(${EXPERT_SYSTEM_LIB} "-framework OpenGL")
+target_include_directories(${EXPERT_SYSTEM_LIB} PUBLIC ${CMAKE_SOURCE_DIR}/libs/${GLEW_LIB}/include)
+target_link_libraries(${EXPERT_SYSTEM_LIB} ${CMAKE_SOURCE_DIR}/libs/${GLEW_LIB}/lib/libGLEW.a)
 
 # add IMGUI to lib
 target_sources(${EXPERT_SYSTEM_LIB} PUBLIC
