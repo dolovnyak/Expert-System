@@ -62,13 +62,14 @@ Build and run on `MacOS`:
 -------
 ```
 git submodule update --init --recursive
-brew install glew
-cmake .
-make
+cmake -S . -B build -DINSTALL_DEPS=true
+make -C build
 
 ./expert_system -v example.txt (visual mode with the ability to change expressions in real time)
 or 
 ./expert_system example.txt (console answer)
+or
+./expert_system_tests
 ```
 
 Graphical examples:
