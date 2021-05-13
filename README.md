@@ -61,6 +61,7 @@ A + B <=> !C    # A and B if and only if not C
 Build and run on `MacOS`:
 -------
 ```
+git submodule update --init --recursive
 brew install glew
 cmake .
 make
