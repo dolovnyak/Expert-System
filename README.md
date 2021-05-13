@@ -12,7 +12,7 @@ There are logical expressions, for example:
 A => B      (A implies B)
 C | D => A  (C or D implies A) 
 
-All facts (fact is uppercase letter) are false by default, you can set which facts are true
+All facts (fact is uppercase letter) are false by default, you can set true facts
 ```
 This program calculates, depending on the entered true facts - all facts values.
 ```
