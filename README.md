@@ -11,9 +11,9 @@ There are logical expressions, for example:
 ```
 A => B      (A implies B)
 C | D => A  (C or D implies A) 
-
-All facts (fact is uppercase letter) are false by default, you can set true facts
 ```
+All facts (fact is uppercase letter) are false by default, you can set true facts.
+###
 This program calculates, depending on the entered true facts - all facts values.
 ```
 A=>B
@@ -65,9 +65,9 @@ brew install glew
 cmake .
 make
 
-./expert_system -v example (visual mode with the ability to change expressions in real time)
+./expert_system -v example.txt (visual mode with the ability to change expressions in real time)
 or 
-./expert_system example (console answer)
+./expert_system example.txt (console answer)
 ```
 
 Graphical examples:
