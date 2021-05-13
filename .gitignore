@@ -11,3 +11,4 @@ expert_system
 expert_system_tests
 *.dsym
 *imgui.ini
+build
