@@ -4,7 +4,7 @@ os: osx
 addons:
   homebrew:
     packages:
-    - glew
+      - glew
 before_install:
   - pip install --user cpp-coveralls
 script:
