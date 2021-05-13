@@ -70,3 +70,7 @@ target_link_libraries(${EXPERT_SYSTEM_TESTS}
         gtest_main
         ${EXPERT_SYSTEM_LIB}
         )
+set_target_properties(${EXPERT_SYSTEM_TESTS}
+        PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}"
+        )

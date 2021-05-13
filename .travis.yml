@@ -5,7 +5,6 @@ addons:
   homebrew:
     packages:
     - glew
-    update: true
 before_install:
   - pip install --user cpp-coveralls
 script:
@@ -13,4 +12,4 @@ script:
   - make
   - ./expert_system_tests
 after_success:
-  ~/Library/Python/2.7/bin/cpp-coveralls --root . -E ".*CMakeFiles.*" -i src -i include
+  ~/Library/Python/2.7/bin/cpp-coveralls --root . -i src -i include -E ".*CMakeFiles.*" --exclude include/argparse/argparse.hpp
