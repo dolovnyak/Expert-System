@@ -9,4 +9,4 @@ script:
   - make -C build
   - ./expert_system_tests
 after_success:
-  ~/Library/Python/2.7/bin/cpp-coveralls --root . -i src -i include -E ".*CMakeFiles.*" --exclude include/argparse/argparse.hpp
+  ~/Library/Python/2.7/bin/cpp-coveralls --root . -i src -i include -E ".*CMakeFiles.*" --exclude include/argparse/argparse.hpp --exclude src/Parse/Lexer.lex --exclude src/Parse/Grammar.yacc --exclude src/Visualizer.cpp --exclude include/Visualizer.hpp
