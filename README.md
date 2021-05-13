@@ -14,7 +14,7 @@ C | D => A  (C or D implies A)
 
 All facts (fact is uppercase letter) are false by default, you can set which facts are true
 ```
-This program calculates, depending on the entered facts - all facts values.
+This program calculates, depending on the entered true facts - all facts values.
 ```
 A=>B
 # A - false, B - false
