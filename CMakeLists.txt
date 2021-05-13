@@ -4,8 +4,6 @@ project(expert_system)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra")
 set(CMAKE_CXX_STANDARD 17)
 
-execute_process(COMMAND git submodule update --init --recursive)
-
 # add expert eystem lib
 set(EXPERT_SYSTEM_LIB "${PROJECT_NAME}_lib")
 add_library(${EXPERT_SYSTEM_LIB})
