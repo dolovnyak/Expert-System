@@ -4,19 +4,52 @@ project(expert_system)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra")
 set(CMAKE_CXX_STANDARD 17)
 
-# add expert eystem lib
+################################################################################
+# expert_system_lib target
+################################################################################
 set(EXPERT_SYSTEM_LIB "${PROJECT_NAME}_lib")
-add_library(${EXPERT_SYSTEM_LIB})
-set(YACC_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include) #for copy yacc output .hpp
+add_library(${EXPERT_SYSTEM_LIB}
+        src/ExpertSystemLib/ExpertSystemData.cpp
+        src/ExpertSystemLib/ExpertSystem.cpp
+        src/ExpertSystemLib/Parse/Lexer.ll.cpp
+        src/ExpertSystemLib/Parse/Grammar.yy.cpp
+        src/ExpertSystemLib/Expressions/FactExpression.cpp
+        src/ExpertSystemLib/Expressions/UnaryExpression.cpp
+        src/ExpertSystemLib/Expressions/BinaryExpression.cpp
+        src/ExpertSystemLib/Expressions/Expression.cpp
+        )
+INCLUDE(ParseGenerator.cmake)
 target_include_directories(${EXPERT_SYSTEM_LIB} PUBLIC include)
-add_subdirectory(src)
 
-# add GLWF to lib
+
+################################################################################
+# project target
+################################################################################
+add_executable(${PROJECT_NAME}
+        src/main.cpp
+        src/Visualizer.cpp
+        )
+target_link_libraries(${PROJECT_NAME} ${EXPERT_SYSTEM_LIB})
+target_include_directories(${PROJECT_NAME} PUBLIC include)
+
+# replaced executable file to root dir
+set_target_properties(${PROJECT_NAME}
+        PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}"
+        )
+
+
+################################################################################
+# GLWF library to project target
+################################################################################
 add_subdirectory(libs/glfw)
-target_include_directories(${EXPERT_SYSTEM_LIB} PUBLIC ${GLFW_INCLUDE_DIRS})
-target_link_libraries(${EXPERT_SYSTEM_LIB} glfw)
+target_include_directories(${PROJECT_NAME} PUBLIC ${GLFW_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} glfw)
 
-#add GLEW to lib
+
+################################################################################
+# GLEW library to project target
+################################################################################
 if (INSTALL_DEPS)
     set(GLEW_LIB glew-glew-2.1.0)
     execute_process(
@@ -35,14 +68,16 @@ if (INSTALL_DEPS)
             COMMAND make -j4 glew.lib.static
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/${GLEW_LIB})
 endif()
-
 add_definitions(-DGLEW_STATIC)
-target_link_libraries(${EXPERT_SYSTEM_LIB} "-framework OpenGL")
-target_include_directories(${EXPERT_SYSTEM_LIB} PUBLIC ${CMAKE_SOURCE_DIR}/libs/${GLEW_LIB}/include)
-target_link_libraries(${EXPERT_SYSTEM_LIB} ${CMAKE_SOURCE_DIR}/libs/${GLEW_LIB}/lib/libGLEW.a)
+target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/libs/${GLEW_LIB}/include)
+target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/libs/${GLEW_LIB}/lib/libGLEW.a)
 
-# add IMGUI to lib
-target_sources(${EXPERT_SYSTEM_LIB} PUBLIC
+
+################################################################################
+# IMGUI library
+################################################################################
+target_sources(${PROJECT_NAME} PUBLIC
         libs/imgui/imgui.cpp
         libs/imgui/imgui_demo.cpp
         libs/imgui/imgui_draw.cpp
@@ -51,24 +86,14 @@ target_sources(${EXPERT_SYSTEM_LIB} PUBLIC
         libs/imgui/backends/imgui_impl_glfw.cpp
         libs/imgui/backends/imgui_impl_opengl3.cpp
         )
-target_include_directories(${EXPERT_SYSTEM_LIB} PUBLIC
+target_include_directories(${PROJECT_NAME} PUBLIC
         libs/imgui
         libs/imgui/backends
         )
 
-# add project target
-add_executable(${PROJECT_NAME} src/main.cpp)
-target_link_libraries(${PROJECT_NAME} ${EXPERT_SYSTEM_LIB})
-target_include_directories(${PROJECT_NAME} PUBLIC include)
-
-# replaced executable file to root dir
-set_target_properties(${PROJECT_NAME}
-        PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}"
-        )
-
-
-#add tests
+################################################################################
+# tests
+################################################################################
 set(EXPERT_SYSTEM_TESTS ${PROJECT_NAME}_tests)
 add_subdirectory(libs/googletest)
 add_executable(${EXPERT_SYSTEM_TESTS}
@@ -89,6 +114,7 @@ target_link_libraries(${EXPERT_SYSTEM_TESTS}
         gtest_main
         ${EXPERT_SYSTEM_LIB}
         )
+# replaced executable file to root dir
 set_target_properties(${EXPERT_SYSTEM_TESTS}
         PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}"
