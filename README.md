@@ -4,7 +4,7 @@
 ###
 [![Coverage Status](https://coveralls.io/repos/github/dolovnyak/Expert-System/badge.svg?branch=master)](https://coveralls.io/github/dolovnyak/Expert-System?branch=master)
 ###
-Expert system for logical expressions on backward-chaining inference engine.
+Expert system that solves logical expressions (finds the values of all facts depending on the given true facts) using backward-chaining inference engine.
 ------------
 
 There are logical expressions, for example:
