@@ -13,7 +13,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: install coverals
+      run: pip install --user cpp-coveralls
     - name: cmake
-      run: cmake -S . -B build
+      run: cmake -S . -B build -DCMAKE_CXX_FLAGS="-ftest-coverage -fprofile-arcs" -DINSTALL_DEPS=true 
     - name: make
       run: make -C build
+    - name: run_tests
+      run: ./expert_system_tests
