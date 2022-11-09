@@ -23,3 +23,5 @@ jobs:
       run: make -C build
     - name: run_tests
       run: ./expert_system_tests
+    - name: update coverals
+      run: ~/Library/Python/2.7/bin/cpp-coveralls --root . -i include/Expressions -i include/ExpertSystem.hpp -i include/ExpertSystemData.hpp -i src/ExpertSystemLib -e src/ExpertSystemLib/Parse/Lexer.lex -e src/ExpertSystemLib/Parse/Grammar.yacc
