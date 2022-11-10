@@ -25,8 +25,3 @@ jobs:
       
     - name: run_tests
       run: ./expert_system_tests
-    
-    - name: Coveralls
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
