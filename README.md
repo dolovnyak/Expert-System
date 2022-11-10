@@ -1,9 +1,7 @@
 # Expert-System
 
 ## MacOS - [![Build Status](https://www.travis-ci.com/dolovnyak/Expert-System.svg?branch=master)](https://www.travis-ci.com/dolovnyak/Expert-System)
-###
-[![Coverage Status](https://coveralls.io/repos/github/dolovnyak/Expert-System/badge.svg?branch=master)](https://coveralls.io/github/dolovnyak/Expert-System?branch=master)
-###
+
 Expert system that solves logical expressions (finds the values of all facts depending on the given true facts) using backward-chaining inference engine.
 ------------
 
